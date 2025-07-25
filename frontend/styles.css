@@ -16,20 +16,42 @@ body {
 /* Estilo de la barra de navegación */
 .navbar nav {
     display: flex;
-    align-items: center; 
+    align-items: center;
+    justify-content: space-between;
     padding: 10px;
+    width: 100%;
+    box-sizing: border-box;
 }
 
-/* Espaciado y estilo de los enlaces */
-.navbar nav a {
+/* Estilo del contenedor de todos los botones del navbar */
+.navbar-menu {
+    display: flex;
+    justify-content: space-between;
+    width: auto;
+    box-sizing: border-box;
+}
+
+/* Estilo del contenedor de todos los botones de la derecha */
+.navbar-end {
+    margin-left: auto;
+}
+
+/* Estilo de los enlaces */
+.navbar-item {
     text-decoration: none;
     margin-right: 15px;
     font-family: Arial, sans-serif;
     font-size: 16px;
+    white-space: nowrap;
 }
 
-.navbar nav a:hover {
+.navbar-item:hover {
     text-decoration: underline;
+}
+
+.navbar {
+    max-width: 100%;
+    overflow-x: hidden;
 }
 
 @media screen and (max-width: 1022px) {
@@ -37,8 +59,6 @@ body {
         display: flex !important;
     }
 }
-
-
 
 .content {
     padding: 20px;
