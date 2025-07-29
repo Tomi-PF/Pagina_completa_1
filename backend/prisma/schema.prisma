@@ -65,4 +65,5 @@ model Usuarios {
   telefono         Int
   usuario          String
   contraseña      String
+  autenticado Boolean
 }

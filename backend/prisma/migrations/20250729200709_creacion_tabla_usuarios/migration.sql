@@ -7,6 +7,7 @@ CREATE TABLE "Usuarios" (
     "telefono" INTEGER NOT NULL,
     "usuario" TEXT NOT NULL,
     "contraseña" TEXT NOT NULL,
+    "autenticado" BOOLEAN NOT NULL,
 
     CONSTRAINT "Usuarios_pkey" PRIMARY KEY ("id")
 );
