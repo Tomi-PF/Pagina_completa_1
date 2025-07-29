@@ -1,5 +1,5 @@
 -- CreateTable
-CREATE TABLE "Usuarios" (
+CREATE TABLE "Usuario" (
     "id" SERIAL NOT NULL,
     "nombre" TEXT NOT NULL,
     "apellido" TEXT NOT NULL,
@@ -9,5 +9,5 @@ CREATE TABLE "Usuarios" (
     "contraseña" TEXT NOT NULL,
     "autenticado" BOOLEAN NOT NULL,
 
-    CONSTRAINT "Usuarios_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "Usuario_pkey" PRIMARY KEY ("id")
 );

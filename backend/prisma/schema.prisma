@@ -57,13 +57,13 @@ model Reserva {
   fecha_salida      String @default("No especificada")
 }
 
-model Usuarios {
-  id               Int    @id @default(autoincrement())
+model Usuario {
+  id               Int     @id @default(autoincrement())
   nombre           String
   apellido         String
   fecha_nacimiento String
   telefono         Int
   usuario          String
   contraseña      String
-  autenticado Boolean
+  autenticado      Boolean
 }
