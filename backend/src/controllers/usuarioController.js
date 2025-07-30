@@ -59,9 +59,9 @@ const createUsuario = async (req, res) =>{
 
 // Autentica un usuario
 const autenticarUsuario = async (req, res) => {
-    const {usuario_validar} = req.body
+    const {usuario, contraseña} = req.body
 
-    if(!usuario_validar){
+    if(!usuario){
         return res.status(400).json({
             error: "El usuario a autenticar no puede estar vacío."
         })
@@ -70,7 +70,7 @@ const autenticarUsuario = async (req, res) => {
     try {
         const existeUsuario = await prisma.usuario.findUnique({
             where: {
-                usuario: usuario_validar
+                usuario: usuario
             }
         })
 
@@ -82,7 +82,7 @@ const autenticarUsuario = async (req, res) => {
 
         const usuarioAutenticado = await prisma.usuario.update({
             where: {
-                usuario: usuario_validar
+                usuario: usuario
             },
             data: {
                 autenticado: true
