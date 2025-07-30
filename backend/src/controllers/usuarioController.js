@@ -97,8 +97,41 @@ const autenticarUsuario = async (req, res) => {
     }
 }
 
+// Desautentica un usuario
+const desautenticarUsuario = async (req, res) => {
+
+    try {
+        const iniciadoSesionUsuario = await prisma.usuario.findUnique({
+            where: {
+                autenticado: true
+            }
+        })
+
+        if(!iniciadoSesionUsuario){
+            return res.status(404).json({
+                error: "No hay usuario para cerrar sesión."
+            })
+        }
+
+        const usuario = await prisma.usuario.update({
+            where: {
+                autenticado: true
+            },
+            data: {
+                autenticado: false
+            }
+        })
+        res.status(201).json(usuario)
+    } catch (error) {
+        res.status(500).json({
+            error: "Error al desautenticar un usuario"
+        })
+    }
+}
+
 module.exports = {
     getUsuario,
     createUsuario,
-    autenticarUsuario
+    autenticarUsuario,
+    desautenticarUsuario
 }
