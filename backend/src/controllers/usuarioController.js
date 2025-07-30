@@ -1,5 +1,6 @@
 const {PrismaClient, Prisma} = require('@prisma/client')
 const prisma = new PrismaClient()
+const bcrypt = require('bcrypt')
 
 // Busca el usuario autenticado
 const getUsuario = async (req, res) =>{
@@ -39,6 +40,7 @@ const createUsuario = async (req, res) =>{
             })
         }
 
+        const contraseñaEncriptada = await bcrypt.hash(contraseña, 10)
         const usuarioNuevo = await prisma.usuario.create({
             data: {
                 nombre,
@@ -46,7 +48,7 @@ const createUsuario = async (req, res) =>{
                 fecha_nacimiento,
                 telefono: parseInt(telefono),
                 usuario,
-                contraseña
+                contraseña: contraseñaEncriptada
             }
         })
         res.status(201).json(usuarioNuevo)
@@ -76,7 +78,14 @@ const autenticarUsuario = async (req, res) => {
 
         if(!existeUsuario){
             return res.status(404).json({
-                error: "El usuario a validar no existe."
+                error: "El usuario no existe. Verifique sus datos."
+            })
+        }
+
+        const coincideContraseña = await bcrypt.compare(contraseña, existeUsuario.contraseña)
+        if(!coincideContraseña){
+            return res.status(404).json({
+                error: "Contraseña no válida. Verifique sus datos."
             })
         }
 
@@ -96,8 +105,41 @@ const autenticarUsuario = async (req, res) => {
     }
 }
 
+// Desautentica un usuario
+const desautenticarUsuario = async (req, res) => {
+
+    try {
+        const iniciadoSesionUsuario = await prisma.usuario.findUnique({
+            where: {
+                autenticado: true
+            }
+        })
+
+        if(!iniciadoSesionUsuario){
+            return res.status(404).json({
+                error: "No hay usuario para cerrar sesión."
+            })
+        }
+
+        const usuario = await prisma.usuario.update({
+            where: {
+                autenticado: true
+            },
+            data: {
+                autenticado: false
+            }
+        })
+        res.status(201).json(usuario)
+    } catch (error) {
+        res.status(500).json({
+            error: "Error al desautenticar un usuario"
+        })
+    }
+}
+
 module.exports = {
     getUsuario,
     createUsuario,
-    autenticarUsuario
+    autenticarUsuario,
+    desautenticarUsuario
 }
