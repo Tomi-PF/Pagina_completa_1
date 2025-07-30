@@ -7,8 +7,8 @@ const {
     autenticarUsuario
 } = require('../controllers/usuarioController')
 
-router.get('/', getUsuario)
-router.post('/', createUsuario)
-router.put('/', autenticarUsuario)
+router.get('/usuario/', getUsuario)
+router.post('/crear/', createUsuario)
+router.put('/autenticar/', autenticarUsuario)
 
 module.exports = router
