@@ -1,5 +1,6 @@
 const {PrismaClient, Prisma} = require('@prisma/client')
 const prisma = new PrismaClient()
+const bcrypt = require('bcrypt')
 
 // Busca el usuario autenticado
 const getUsuario = async (req, res) =>{
@@ -39,6 +40,7 @@ const createUsuario = async (req, res) =>{
             })
         }
 
+        const contraseñaEncriptada = await bcrypt.hash(contraseña, 10)
         const usuarioNuevo = await prisma.usuario.create({
             data: {
                 nombre,
@@ -46,7 +48,7 @@ const createUsuario = async (req, res) =>{
                 fecha_nacimiento,
                 telefono: parseInt(telefono),
                 usuario,
-                contraseña
+                contraseña: contraseñaEncriptada
             }
         })
         res.status(201).json(usuarioNuevo)
@@ -70,14 +72,20 @@ const autenticarUsuario = async (req, res) => {
     try {
         const existeUsuario = await prisma.usuario.findUnique({
             where: {
-                usuario: usuario,
-                contraseña: contraseña
+                usuario: usuario
             }
         })
 
         if(!existeUsuario){
             return res.status(404).json({
-                error: "Usuario o contraseña no válidos. Verifique sus datos."
+                error: "El usuario no existe. Verifique sus datos."
+            })
+        }
+
+        const coincideContraseña = await bcrypt.compare(contraseña, existeUsuario.contraseña)
+        if(!coincideContraseña){
+            return res.status(404).json({
+                error: "Contraseña no válida. Verifique sus datos."
             })
         }
 
