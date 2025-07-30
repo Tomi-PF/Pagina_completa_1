@@ -70,13 +70,14 @@ const autenticarUsuario = async (req, res) => {
     try {
         const existeUsuario = await prisma.usuario.findUnique({
             where: {
-                usuario: usuario
+                usuario: usuario,
+                contraseña: contraseña
             }
         })
 
         if(!existeUsuario){
             return res.status(404).json({
-                error: "El usuario a validar no existe."
+                error: "Usuario o contraseña no válidos. Verifique sus datos."
             })
         }
 
