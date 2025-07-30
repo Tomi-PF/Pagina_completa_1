@@ -63,6 +63,55 @@
         </div>
 
     </section>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () =>{
+
+            const formularioUsuario = document.getElementById('formReserva')
+
+            formularioUsuario.addEventListener('submit', () =>{
+                event.preventDefault()
+
+                const usuario = document.getElementById('usuario').value.trim()
+                const contraseña = document.getElementById('password').value.trim()
+
+                const usuario_autenticar = {
+                    usuario: usuario,
+                    contraseña: contraseña
+                }
+
+                fetch('http://localhost:3000/api/v1/usuarios/', {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(usuario_autenticar)
+                })
+                .then(response => {
+                    if(!response.ok){
+                        return response.json().then(errorData =>{
+                            alert(errorData.error)
+                            throw new Error(errorData.error || 'Error al autenticar el usuario')
+                        })
+                    }
+                    return response.json()
+                })
+                .then(data => {
+                    console.log("Iniciado de sesión con éxito")
+                    alert("Iniciado de sesión con éxito")
+                    formularioUsuario.reset()
+
+                    const boton_inicio_sesion = document.getElementById('in_ses')
+                    boton_inicio_sesion.style.display = "none"
+                    const boton_registrarse = document.getElementById('reg')
+                    boton_registrarse.style.display = "none"
+                    const boton_cerrar_sesion = document.getElementById('c_ses')
+                    boton_cerrar_sesion.style.display = "flex"
+                })
+            })
+        })
+
+    </script>
     
     
     <footer>
