@@ -19,8 +19,8 @@ const getUsuario = async (req, res) =>{
 
 // Crea un usuario
 const createUsuario = async (req, res) =>{
-    const {nombre_nuevo, apellido_nuevo, fecha_nacimiento_nueva, telefono_nuevo, usuario_nuevo, contraseña_nueva} = req.body
-    if(!usuario_nuevo || !contraseña_nueva){
+    const {nombre, apellido, fecha_nacimiento, telefono, usuario, contraseña} = req.body
+    if(!usuario || !contraseña){
         return res.status(400).json({
             error: "Los campos usuario y contraseña no pueden estar vacíos, son requeridos."
         })
@@ -29,7 +29,7 @@ const createUsuario = async (req, res) =>{
     try {
         const existeUsuario = await prisma.usuario.findUnique({
             where: {
-                usuario: usuario_nuevo
+                usuario: usuario
             }
         })
 
@@ -41,12 +41,12 @@ const createUsuario = async (req, res) =>{
 
         const usuarioNuevo = await prisma.usuario.create({
             data: {
-                nombre_nuevo,
-                apellido_nuevo,
-                fecha_nacimiento_nueva,
-                telefono: parseInt(telefono_nuevo),
-                usuario_nuevo,
-                contraseña_nueva
+                nombre,
+                apellido,
+                fecha_nacimiento,
+                telefono: parseInt(telefono),
+                usuario,
+                contraseña
             }
         })
         res.status(201).json(usuarioNuevo)
