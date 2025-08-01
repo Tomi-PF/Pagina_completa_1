@@ -41,6 +41,12 @@
         <p>Formulario para iniciar sesión</p>
     </div>
         
+    <div class="mensaje_error" id="mensaje_error" style="display: none;">
+        <div class="notification is-danger">
+            <button class="delete" onclick="eliminar_mensaje()"></button>
+            <p id="mensaje"></p>
+        </div>
+    </div>
         
     <section class="section-reservas">
         
@@ -90,17 +96,20 @@
                 .then(response => {
                     if(!response.ok){
                         return response.json().then(errorData =>{
-                            alert(errorData.error)
+                            const contenedor_mensaje = document.getElementById('mensaje_error')
+                            contenedor_mensaje.style.display = "flex"
+                            const contenedor_texto = document.getElementById('mensaje')
+                            contenedor_texto.innerText = errorData.error
                             throw new Error(errorData.error || 'Error al autenticar el usuario')
                         })
                     }
                     return response.json()
                 })
                 .then(data => {
-                    console.log("Iniciado de sesión con éxito")
-                    alert("Iniciado de sesión con éxito")
                     formularioUsuario.reset()
 
+                    const contenedor_mensaje = document.getElementById('mensaje_error')
+                    contenedor_mensaje.style.display = "none"
                     const boton_inicio_sesion = document.getElementById('in_ses')
                     boton_inicio_sesion.style.display = "none"
                     const boton_registrarse = document.getElementById('reg')
@@ -110,6 +119,11 @@
                 })
             })
         })
+
+        function eliminar_mensaje(){
+            const mensaje_error = document.getElementById('mensaje_error')
+            mensaje_error.style.display = "none"
+        }
 
     </script>
     

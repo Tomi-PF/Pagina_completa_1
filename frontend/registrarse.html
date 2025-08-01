@@ -41,6 +41,12 @@
         <p>Formulario para registrarse</p>
     </div>
         
+    <div class="mensaje_error" id="mensaje_error" style="display: none;">
+        <div class="notification is-danger">
+            <button class="delete" onclick="eliminar_mensaje()"></button>
+            <p id="mensaje"></p>
+        </div>
+    </div>
         
     <section class="section-reservas">
         
@@ -134,20 +140,26 @@
                 .then(response => {
                     if(!response.ok){
                         return response.json().then(errorData => {
-                            alert(errorData.error)
+                            const contenedor_mensaje = document.getElementById('mensaje_error')
+                            contenedor_mensaje.style.display = "flex"
+                            const contenedor_texto = document.getElementById('mensaje')
+                            contenedor_texto.innerText = errorData.error
                             throw new Error(errorData.error || "Error al crear el usuario.")
                         })
                     }
                     return response.json()
                 })
                 .then(data => {
-                    console.log('Usuario creado con éxito')
-                    alert("Usuario creado con éxito")
                     formularioUsuario.reset()
                     window.location.href = "http://localhost:8000/iniciar_sesion"
                 })
             })
         })
+
+        function eliminar_mensaje(){
+            const mensaje_error = document.getElementById('mensaje_error')
+            mensaje_error.style.display = "none"
+        }
 
     </script>
 

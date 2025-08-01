@@ -598,3 +598,43 @@ hr {
 #botones-hotel {
     margin: 10px;
 }
+
+/* Contenedor del mensaje de error */
+.mensaje_error {
+    width: 80%;
+    margin: 20px auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10;
+}
+
+/* Estilo de la notificación */
+.notification {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 40px 20px 20px;
+    border-radius: 8px;
+    width: 100%;
+    max-width: 400px;
+    font-size: 16px;
+    text-align: left;
+    min-height: 60px;
+}
+
+/* Estilo del botón de eliminar */
+.notification .delete {
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    transform: translateY(-50%);
+    background-color: transparent;
+}
+
+/* Hover del botón de eliminar */
+.notification .delete:hover {
+    color: #fff;
+    opacity: 0.7;
+}
