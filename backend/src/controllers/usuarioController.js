@@ -4,10 +4,12 @@ const bcrypt = require('bcrypt')
 
 // Busca el usuario autenticado
 const getUsuario = async (req, res) =>{
+    const {id_usuario} = req.params
+    
     try {
         const usuario = await prisma.usuario.findUnique({
             where: {
-                autenticado: true,
+                id: parseInt(id_usuario)
             }
         })
         res.status(201).json(usuario)
@@ -107,15 +109,16 @@ const autenticarUsuario = async (req, res) => {
 
 // Desautentica un usuario
 const desautenticarUsuario = async (req, res) => {
+    const {id_usuario} = req.params
 
     try {
         const iniciadoSesionUsuario = await prisma.usuario.findUnique({
             where: {
-                autenticado: true
+                id: parseInt(id_usuario)
             }
         })
 
-        if(!iniciadoSesionUsuario){
+        if(!iniciadoSesionUsuario.autenticado){
             return res.status(404).json({
                 error: "No hay usuario para cerrar sesión."
             })
@@ -123,7 +126,7 @@ const desautenticarUsuario = async (req, res) => {
 
         const usuario = await prisma.usuario.update({
             where: {
-                autenticado: true
+                id: parseInt(id_usuario)
             },
             data: {
                 autenticado: false

@@ -8,9 +8,9 @@ const {
     desautenticarUsuario
 } = require('../controllers/usuarioController')
 
-router.get('/usuario/', getUsuario)
+router.get('/usuario/:id_usuario', getUsuario)
 router.post('/crear/', createUsuario)
 router.put('/autenticar/', autenticarUsuario)
-router.put('/desautenticar/', desautenticarUsuario)
+router.put('/desautenticar/:id_usuario', desautenticarUsuario)
 
 module.exports = router
