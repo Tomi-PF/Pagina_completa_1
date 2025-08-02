@@ -2,8 +2,9 @@ const {PrismaClient, Prisma} = require('@prisma/client')
 const prisma = new PrismaClient()
 const bcrypt = require('bcrypt')
 
-// Busca el usuario autenticado
+// Busca el usuario según id
 const getUsuario = async (req, res) =>{
+
     const {id_usuario} = req.params
     
     try {
@@ -22,7 +23,9 @@ const getUsuario = async (req, res) =>{
 
 // Crea un usuario
 const createUsuario = async (req, res) =>{
+
     const {nombre, apellido, fecha_nacimiento, telefono, usuario, contraseña} = req.body
+
     if(!usuario || !contraseña){
         return res.status(400).json({
             error: "Los campos usuario y contraseña no pueden estar vacíos, son requeridos."
@@ -61,8 +64,9 @@ const createUsuario = async (req, res) =>{
     }
 }
 
-// Autentica un usuario
+// Autentica un usuario según usuario y contraseña
 const autenticarUsuario = async (req, res) => {
+
     const {usuario, contraseña} = req.body
 
     if(!usuario){
@@ -107,8 +111,9 @@ const autenticarUsuario = async (req, res) => {
     }
 }
 
-// Desautentica un usuario
+// Desautentica un usuario según id
 const desautenticarUsuario = async (req, res) => {
+
     const {id_usuario} = req.params
 
     try {
