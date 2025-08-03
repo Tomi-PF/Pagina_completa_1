@@ -41,6 +41,12 @@
         <p>Formulario para registrarse</p>
     </div>
         
+    <div class="mensaje_error" id="mensaje_error" style="display: none;">
+        <div class="notification is-danger">
+            <button class="delete" onclick="eliminar_mensaje()"></button>
+            <p id="mensaje"></p>
+        </div>
+    </div>
         
     <section class="section-reservas">
         
@@ -95,6 +101,67 @@
         <p>Contacto: <a href="mailto:Aterrizar@gmail.com">Aterrizar@gmail.com</a> | Teléfono: 0800-777-2354</p>
     </footer>
     
+    <script>
+
+        // Crear un nuevo usuario
+        document.addEventListener('DOMContentLoaded', () => {
+
+            // Selecciona el formulario
+            const formularioUsuario = document.getElementById('formReserva')
+
+            // Al enviar el formulario
+            formularioUsuario.addEventListener('submit', () => {
+                event.preventDefault()
+
+                // Obtención de los datos de nuevo usuario
+                const nombre_nuevo = document.getElementById('nombre').value.trim()
+                const apellido_nuevo = document.getElementById('apellido').value.trim()
+                const fecha_nueva = document.getElementById('fecha').value.trim()
+                const telefono_nuevo = document.getElementById('telefono').value.trim()
+                const usuario_nuevo = document.getElementById('usuario').value.trim()
+                const contraseña_nueva = document.getElementById('password').value.trim()
+
+                const datosUsuario = {
+                    nombre: nombre_nuevo,
+                    apellido: apellido_nuevo,
+                    fecha_nacimiento: fecha_nueva,
+                    telefono: telefono_nuevo,
+                    usuario: usuario_nuevo,
+                    contraseña: contraseña_nueva
+                }
+
+                fetch('http://localhost:3000/api/v1/usuarios/crear/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(datosUsuario)
+                })
+                .then(response => {
+                    if(!response.ok){
+                        return response.json().then(errorData => {
+                            const contenedor_mensaje = document.getElementById('mensaje_error')
+                            contenedor_mensaje.style.display = "flex"
+                            const contenedor_texto = document.getElementById('mensaje')
+                            contenedor_texto.innerText = errorData.error
+                            throw new Error(errorData.error || "Error al crear el usuario.")
+                        })
+                    }
+                    return response.json()
+                })
+                .then(data => {
+                    formularioUsuario.reset()
+                    window.location.href = "http://localhost:8000/iniciar_sesion"
+                })
+            })
+        })
+
+        function eliminar_mensaje(){
+            const mensaje_error = document.getElementById('mensaje_error')
+            mensaje_error.style.display = "none"
+        }
+
+    </script>
 
 </body>
 </html>

@@ -28,7 +28,7 @@
                 <div class="navbar-end">
                     <a href="iniciar_sesion.html" class="navbar-item" id="in_ses">Iniciar sesión</a>
                     <a href="registrarse.html" class="navbar-item" id="reg">Registrarse</a>
-                    <a href="#" class="navbar-item" id="c_ses" style="display: none;">Cerrar sesión</a>
+                    <a href="#" class="navbar-item" id="c_ses" style="display: none;" onclick="cerrar_sesion()">Cerrar sesión</a>
                 </div>
             </div>
         </nav>
@@ -54,6 +54,20 @@
 
     <script>
 
+        document.addEventListener('DOMContentLoaded', () => {
+
+            if(localStorage.getItem('id_usuario')){
+                
+                const boton_inicio_sesion = document.getElementById('in_ses')
+                boton_inicio_sesion.style.display = "none"
+                const boton_registrarse = document.getElementById('reg')
+                boton_registrarse.style.display = "none"
+                const boton_cerrar_sesion = document.getElementById('c_ses')
+                boton_cerrar_sesion.style.display = "flex"
+
+            }
+        })
+
         const urlParams = new URLSearchParams(window.location.search);
         const ciudadId = urlParams.get('id');
 
@@ -77,20 +91,22 @@
                     const Nombre = document.createElement('p')
                     Nombre.setAttribute("class", "city-name")
                     Nombre.innerText = hotel.nombre
-                    // Creación del Botón modificar
-                    const Boton_modificar = document.createElement('a')
-                    Boton_modificar.setAttribute("class", "button is-primary is-outlined")
-                    Boton_modificar.innerText = "Modificar"
-                    Boton_modificar.addEventListener('click', () => {
-                        Boton_modificar.href = `modificar_hotel.html?hotel_id=${hotel.id}&ciudad_id=${ciudadId}&nombre_hotel=${hotel.nombre}`
-                    })
-                    // Creación del Botón para borrar el hotel
-                    const Boton_borrar = document.createElement('a')
-                    Boton_borrar.setAttribute("class", "button is-danger is-outlined")
-                    Boton_borrar.innerText = "Borrar hotel"
-                    Boton_borrar.addEventListener('click', () => {
-                        borrar_ciudad(hotel.id)
-                    })
+                    if(localStorage.getItem('id_usuario')){
+                        // Creación del Botón modificar
+                        const Boton_modificar = document.createElement('a')
+                        Boton_modificar.setAttribute("class", "button is-primary is-outlined")
+                        Boton_modificar.innerText = "Modificar"
+                        Boton_modificar.addEventListener('click', () => {
+                            Boton_modificar.href = `modificar_hotel.html?hotel_id=${hotel.id}&ciudad_id=${ciudadId}&nombre_hotel=${hotel.nombre}`
+                        })
+                        // Creación del Botón para borrar el hotel
+                        const Boton_borrar = document.createElement('a')
+                        Boton_borrar.setAttribute("class", "button is-danger is-outlined")
+                        Boton_borrar.innerText = "Borrar hotel"
+                        Boton_borrar.addEventListener('click', () => {
+                            borrar_ciudad(hotel.id)
+                        })
+                    }
                     // Creación del Contenedor
                     const Contenedor = document.createElement('div')
                     Contenedor.setAttribute("class", "overlay")
@@ -137,6 +153,24 @@
         }
         
         crear_card_hotel()
+
+        function cerrar_sesion(){
+
+            const id_usuario = localStorage.getItem('id_usuario')
+            fetch('http://localhost:3000/api/v1/usuarios/desautenticar/' + id_usuario, {
+                method: 'PUT'
+            })
+
+            const boton_inicio_sesion = document.getElementById('in_ses')
+            boton_inicio_sesion.style.display = "flex"
+            const boton_registrarse = document.getElementById('reg')
+            boton_registrarse.style.display = "flex"
+            const boton_cerrar_sesion = document.getElementById('c_ses')
+            boton_cerrar_sesion.style.display = "none"
+
+            localStorage.removeItem('id_usuario')
+        }
+
     </script>
 
 </body>

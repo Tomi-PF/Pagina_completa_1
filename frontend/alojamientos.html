@@ -28,7 +28,7 @@
                 <div class="navbar-end">
                     <a href="iniciar_sesion.html" class="navbar-item" id="in_ses">Iniciar sesión</a>
                     <a href="registrarse.html" class="navbar-item" id="reg">Registrarse</a>
-                    <a href="#" class="navbar-item" id="c_ses" style="display: none;">Cerrar sesión</a>
+                    <a href="#" class="navbar-item" id="c_ses" style="display: none;" onclick="cerrar_sesion()">Cerrar sesión</a>
                 </div>
             </div>
         </nav>
@@ -39,7 +39,10 @@
         <h2>Alojamientos</h2>
         <p>Aquí puedes encontrar los mejores alojamientos de Argentina</p>
 
-        <a class="button is-info is-outlined" href="crear_ciudades.html">Crear ciudades</a>
+        <div id="botones">
+            <a id="crear_ciudades" class="button is-info is-outlined" href="crear_ciudades.html" style="display: none;">Crear ciudades</a>
+        </div>
+        
 
         <div class="columns is-multiline" id="ciudadesContainer">
             <!-- Cuadrícula de imágenes dinámica -->
@@ -53,6 +56,23 @@
     </footer>
 
     <script>
+
+        document.addEventListener('DOMContentLoaded', () => {
+
+            if(localStorage.getItem('id_usuario')){
+
+                const boton_inicio_sesion = document.getElementById('in_ses')
+                boton_inicio_sesion.style.display = "none"
+                const boton_registrarse = document.getElementById('reg')
+                boton_registrarse.style.display = "none"
+                const boton_cerrar_sesion = document.getElementById('c_ses')
+                boton_cerrar_sesion.style.display = "flex"
+                const boton_crear_ciudades = document.getElementById('crear_ciudades')
+                boton_crear_ciudades.style.display = "block"
+
+            }
+        })
+
         function crear_card_ciudad() {
             const container = document.getElementById('ciudadesContainer')
             const mensaje = document.getElementById('mensajeError')
@@ -81,12 +101,14 @@
                         Boton_info.href = `info_ciudad.html?id=${ciudad.id}`
                     })
                     // Creación del Botón para borrar la ciudad
-                    const Boton_borrar = document.createElement('a')
-                    Boton_borrar.setAttribute("class", "button is-danger is-outlined")
-                    Boton_borrar.innerText = "Borrar ciudad"
-                    Boton_borrar.addEventListener('click', () => {
-                        borrar_ciudad(ciudad.id)
-                    })
+                    if(localStorage.getItem('id_usuario')){
+                        const Boton_borrar = document.createElement('a')
+                        Boton_borrar.setAttribute("class", "button is-danger is-outlined")
+                        Boton_borrar.innerText = "Borrar ciudad"
+                        Boton_borrar.addEventListener('click', () => {
+                            borrar_ciudad(ciudad.id)
+                        })
+                    }
                     // Creación del Contenedor
                     const Contenedor = document.createElement('div')
                     Contenedor.setAttribute("class", "overlay")
@@ -130,6 +152,25 @@
                 container.innerText = ''
                 crear_card_ciudad()
             })
+        }
+
+        function cerrar_sesion(){
+
+            const id_usuario = localStorage.getItem('id_usuario')
+            fetch('http://localhost:3000/api/v1/usuarios/desautenticar/' + id_usuario, {
+                method: 'PUT'
+            })
+
+            const boton_inicio_sesion = document.getElementById('in_ses')
+            boton_inicio_sesion.style.display = "flex"
+            const boton_registrarse = document.getElementById('reg')
+            boton_registrarse.style.display = "flex"
+            const boton_cerrar_sesion = document.getElementById('c_ses')
+            boton_cerrar_sesion.style.display = "none"
+            const boton_crear_ciudades = document.getElementById('crear_ciudades')
+            boton_crear_ciudades.style.display = "none"
+
+            localStorage.removeItem('id_usuario')
         }
         
         crear_card_ciudad()

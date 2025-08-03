@@ -1,26 +1,13 @@
 const {PrismaClient, Prisma} = require('@prisma/client')
 const prisma = new PrismaClient()
-
-// Busca el usuario autenticado
-const getUsuario = async (req, res) =>{
-    try {
-        const usuario = await prisma.usuario.findUnique({
-            where: {
-                autenticado: true,
-            }
-        })
-        res.status(201).json(usuario)
-    } catch (error) {
-        res.status(500).json({
-            error: "Error al obtener el usuario."
-        })
-    }
-}
+const bcrypt = require('bcrypt')
 
 // Crea un usuario
 const createUsuario = async (req, res) =>{
-    const {nombre_nuevo, apellido_nuevo, fecha_nacimiento_nueva, telefono_nuevo, usuario_nuevo, contraseña_nueva} = req.body
-    if(!usuario_nuevo || !contraseña_nueva){
+
+    const {nombre, apellido, fecha_nacimiento, telefono, usuario, contraseña} = req.body
+
+    if(!usuario || !contraseña){
         return res.status(400).json({
             error: "Los campos usuario y contraseña no pueden estar vacíos, son requeridos."
         })
@@ -29,7 +16,7 @@ const createUsuario = async (req, res) =>{
     try {
         const existeUsuario = await prisma.usuario.findUnique({
             where: {
-                usuario: usuario_nuevo
+                usuario: usuario
             }
         })
 
@@ -39,14 +26,15 @@ const createUsuario = async (req, res) =>{
             })
         }
 
+        const contraseñaEncriptada = await bcrypt.hash(contraseña, 10)
         const usuarioNuevo = await prisma.usuario.create({
             data: {
-                nombre_nuevo,
-                apellido_nuevo,
-                fecha_nacimiento_nueva,
-                telefono: parseInt(telefono_nuevo),
-                usuario_nuevo,
-                contraseña_nueva
+                nombre,
+                apellido,
+                fecha_nacimiento,
+                telefono: parseInt(telefono),
+                usuario,
+                contraseña: contraseñaEncriptada
             }
         })
         res.status(201).json(usuarioNuevo)
@@ -57,11 +45,12 @@ const createUsuario = async (req, res) =>{
     }
 }
 
-// Autentica un usuario
+// Autentica un usuario según usuario y contraseña
 const autenticarUsuario = async (req, res) => {
-    const {usuario_validar} = req.body
 
-    if(!usuario_validar){
+    const {usuario, contraseña} = req.body
+
+    if(!usuario){
         return res.status(400).json({
             error: "El usuario a autenticar no puede estar vacío."
         })
@@ -70,19 +59,26 @@ const autenticarUsuario = async (req, res) => {
     try {
         const existeUsuario = await prisma.usuario.findUnique({
             where: {
-                usuario: usuario_validar
+                usuario: usuario
             }
         })
 
         if(!existeUsuario){
             return res.status(404).json({
-                error: "El usuario a validar no existe."
+                error: "El usuario no existe. Verifique sus datos."
+            })
+        }
+
+        const coincideContraseña = await bcrypt.compare(contraseña, existeUsuario.contraseña)
+        if(!coincideContraseña){
+            return res.status(404).json({
+                error: "Contraseña no válida. Verifique sus datos."
             })
         }
 
         const usuarioAutenticado = await prisma.usuario.update({
             where: {
-                usuario: usuario_validar
+                usuario: usuario
             },
             data: {
                 autenticado: true
@@ -96,8 +92,42 @@ const autenticarUsuario = async (req, res) => {
     }
 }
 
+// Desautentica un usuario según id
+const desautenticarUsuario = async (req, res) => {
+
+    const {id_usuario} = req.params
+
+    try {
+        const iniciadoSesionUsuario = await prisma.usuario.findUnique({
+            where: {
+                id: parseInt(id_usuario)
+            }
+        })
+
+        if(!iniciadoSesionUsuario.autenticado){
+            return res.status(404).json({
+                error: "No hay usuario para cerrar sesión."
+            })
+        }
+
+        const usuario = await prisma.usuario.update({
+            where: {
+                id: parseInt(id_usuario)
+            },
+            data: {
+                autenticado: false
+            }
+        })
+        res.status(201).json(usuario)
+    } catch (error) {
+        res.status(500).json({
+            error: "Error al desautenticar un usuario"
+        })
+    }
+}
+
 module.exports = {
-    getUsuario,
     createUsuario,
-    autenticarUsuario
+    autenticarUsuario,
+    desautenticarUsuario
 }
