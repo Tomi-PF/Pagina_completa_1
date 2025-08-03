@@ -2,25 +2,6 @@ const {PrismaClient, Prisma} = require('@prisma/client')
 const prisma = new PrismaClient()
 const bcrypt = require('bcrypt')
 
-// Busca el usuario según id
-const getUsuario = async (req, res) =>{
-
-    const {id_usuario} = req.params
-    
-    try {
-        const usuario = await prisma.usuario.findUnique({
-            where: {
-                id: parseInt(id_usuario)
-            }
-        })
-        res.status(201).json(usuario)
-    } catch (error) {
-        res.status(500).json({
-            error: "Error al obtener el usuario."
-        })
-    }
-}
-
 // Crea un usuario
 const createUsuario = async (req, res) =>{
 
@@ -146,7 +127,6 @@ const desautenticarUsuario = async (req, res) => {
 }
 
 module.exports = {
-    getUsuario,
     createUsuario,
     autenticarUsuario,
     desautenticarUsuario
