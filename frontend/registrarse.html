@@ -72,6 +72,11 @@
                 </div>
 
                 <div class="input-box">
+                    <label>Email</label>
+                    <input type="email" name="email" id="email" placeholder="Ingrese su email" required>
+                </div>
+
+                <div class="input-box">
                     <label>Numero de teléfono</label>
                     <input type="number" name="telefono" id="telefono" placeholder="Ingrese su numero de telefono" required>
                 </div>
@@ -117,6 +122,7 @@
                 const nombre_nuevo = document.getElementById('nombre').value.trim()
                 const apellido_nuevo = document.getElementById('apellido').value.trim()
                 const fecha_nueva = document.getElementById('fecha').value.trim()
+                const email_nuevo = document.getElementById('email').value.trim()
                 const telefono_nuevo = document.getElementById('telefono').value.trim()
                 const usuario_nuevo = document.getElementById('usuario').value.trim()
                 const contraseña_nueva = document.getElementById('password').value.trim()
@@ -125,6 +131,7 @@
                     nombre: nombre_nuevo,
                     apellido: apellido_nuevo,
                     fecha_nacimiento: fecha_nueva,
+                    email: email_nuevo,
                     telefono: telefono_nuevo,
                     usuario: usuario_nuevo,
                     contraseña: contraseña_nueva
