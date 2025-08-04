@@ -62,6 +62,7 @@ model Usuario {
   nombre           String
   apellido         String
   fecha_nacimiento String
+  email            String
   telefono         Int
   usuario          String  @unique
   contraseña      String
