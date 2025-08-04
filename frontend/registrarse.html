@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aterrizar</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.2/css/bulma.min.css">
+    <link rel="stylesheet" href="styles.css"> <!-- Enlace al archivo CSS -->
+</head>
+
+<body>
+
+    <div class="navbar">
+
+        <nav class="navbar" role="navigation" aria-label="main navigation">
+            <div class="navbar-brand">
+                <a href="index.html">
+                    <img src="img/Logo.png" alt="Logo de Aterrizar" class="logo">
+                </a>
+            </div>
+
+            <div class="navbar-menu">
+                <div class="navbar-start">
+                    <a href="index.html" class="navbar-item">Inicio</a>
+                    <a href="alojamientos.html" class="navbar-item">Alojamientos</a>
+                    <a href="reservas.html" class="navbar-item">Reservas</a>
+                </div>
+
+                <div class="navbar-end">
+                    <a href="iniciar_sesion.html" class="navbar-item" id="in_ses">Iniciar sesión</a>
+                    <a href="registrarse.html" class="navbar-item" id="reg">Registrarse</a>
+                    <a href="#" class="navbar-item" id="c_ses" style="display: none;">Cerrar sesión</a>
+                </div>
+            </div>
+        </nav>
+
+    </div>
+    
+    <div class="content">    
+        <h2>Registarse</h2>
+        <p>Formulario para registrarse</p>
+    </div>
+        
+    <div class="mensaje_error" id="mensaje_error" style="display: none;">
+        <div class="notification is-danger">
+            <button class="delete" onclick="eliminar_mensaje()"></button>
+            <p id="mensaje"></p>
+        </div>
+    </div>
+        
+    <section class="section-reservas">
+        
+        <div class="contenedor-form" id="form_seccion">
+            <header>Formulario para registrarse</header>
+            <form class="form" id="formReserva" method="post">
+                
+                <p class="comentario">Datos personales</p>
+
+                <div class="input-box">
+                    <label>Nombre</label>
+                    <input type="text" name="nombre" id="nombre" placeholder="Ingrese su nombre" required>
+                </div>
+
+                <div class="input-box">
+                    <label>Apellido</label>
+                    <input type="text" name="apellido" id="apellido" placeholder="Ingrese su apellido" required>
+                </div>
+
+                <div class="input-box">
+                    <label>Fecha de nacimiento</label>
+                    <input type="date" name="fecha" id="fecha" required>
+                </div>
+
+                <div class="input-box">
+                    <label>Email</label>
+                    <input type="email" name="email" id="email" placeholder="Ingrese su email" required>
+                </div>
+
+                <div class="input-box">
+                    <label>Numero de teléfono</label>
+                    <input type="number" name="telefono" id="telefono" placeholder="Ingrese su numero de telefono" required>
+                </div>
+
+                <hr>
+
+                <p class="comentario">Datos de su cuenta</p>
+
+                <div class="input-box">
+                    <label>Usuario</label>
+                    <input type="text" name="usuario" id="usuario" placeholder="Ingrese su usuario" required>
+                </div>
+                
+                <div class="input-box">
+                    <label>Contraseña</label>
+                    <input type="password" name="password" id="password" placeholder="Ingrese su contraseña" required>
+                </div>
+                
+                <button type="submit">Registarse</button>
+            </form>
+        </div>
+
+    </section>
+    
+    
+    <footer>
+        <p>Contacto: <a href="mailto:Aterrizar@gmail.com">Aterrizar@gmail.com</a> | Teléfono: 0800-777-2354</p>
+    </footer>
+    
+    <script>
+
+        // Crear un nuevo usuario
+        document.addEventListener('DOMContentLoaded', () => {
+
+            // Selecciona el formulario
+            const formularioUsuario = document.getElementById('formReserva')
+
+            // Al enviar el formulario
+            formularioUsuario.addEventListener('submit', () => {
+                event.preventDefault()
+
+                // Obtención de los datos de nuevo usuario
+                const nombre_nuevo = document.getElementById('nombre').value.trim()
+                const apellido_nuevo = document.getElementById('apellido').value.trim()
+                const fecha_nueva = document.getElementById('fecha').value.trim()
+                const email_nuevo = document.getElementById('email').value.trim()
+                const telefono_nuevo = document.getElementById('telefono').value.trim()
+                const usuario_nuevo = document.getElementById('usuario').value.trim()
+                const contraseña_nueva = document.getElementById('password').value.trim()
+
+                const datosUsuario = {
+                    nombre: nombre_nuevo,
+                    apellido: apellido_nuevo,
+                    fecha_nacimiento: fecha_nueva,
+                    email: email_nuevo,
+                    telefono: telefono_nuevo,
+                    usuario: usuario_nuevo,
+                    contraseña: contraseña_nueva
+                }
+
+                fetch('http://localhost:3000/api/v1/usuarios/crear/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(datosUsuario)
+                })
+                .then(response => {
+                    if(!response.ok){
+                        return response.json().then(errorData => {
+                            const contenedor_mensaje = document.getElementById('mensaje_error')
+                            contenedor_mensaje.style.display = "flex"
+                            const contenedor_texto = document.getElementById('mensaje')
+                            contenedor_texto.innerText = errorData.error
+                            throw new Error(errorData.error || "Error al crear el usuario.")
+                        })
+                    }
+                    return response.json()
+                })
+                .then(data => {
+                    formularioUsuario.reset()
+                    window.location.href = "http://localhost:8000/iniciar_sesion"
+                })
+            })
+        })
+
+        function eliminar_mensaje(){
+            const mensaje_error = document.getElementById('mensaje_error')
+            mensaje_error.style.display = "none"
+        }
+
+    </script>
+
+</body>
+</html>

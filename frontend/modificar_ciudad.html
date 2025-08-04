@@ -9,26 +9,29 @@
 </head>
 <body>
     <div class="navbar">
+
         <nav class="navbar" role="navigation" aria-label="main navigation">
             <div class="navbar-brand">
-                
                 <a href="index.html">
                     <img src="img/Logo.png" alt="Logo de Aterrizar" class="logo">
                 </a>
             </div>
-          
-            <div id="navbarBasicExample" class="navbar-menu">
-                
+
+            <div class="navbar-menu">
                 <div class="navbar-start">
-                
                     <a href="index.html" class="navbar-item">Inicio</a>
-          
                     <a href="alojamientos.html" class="navbar-item">Alojamientos</a>
                     <a href="reservas.html" class="navbar-item">Reservas</a>
-                    
+                </div>
+
+                <div class="navbar-end">
+                    <a href="iniciar_sesion.html" class="navbar-item" id="in_ses">Iniciar sesión</a>
+                    <a href="registrarse.html" class="navbar-item" id="reg">Registrarse</a>
+                    <a href="#" class="navbar-item" id="c_ses" style="display: none;" onclick="cerrar_sesion()">Cerrar sesión</a>
                 </div>
             </div>
         </nav>
+
     </div>
     
     <div class="content">
@@ -82,6 +85,8 @@
         let nombre_ciudad = ""
 
         document.addEventListener('DOMContentLoaded', () => {
+
+            cambiar_botones()
 
             fetch('http://localhost:3000/api/v1/ciudades/' + parseInt(id_ciudad))
             .then(response => response.json())
@@ -140,6 +145,36 @@
             });
         }
         
+        function cambiar_botones(){
+
+            if(localStorage.getItem('id_usuario')){
+
+                const boton_inicio_sesion = document.getElementById('in_ses')
+                boton_inicio_sesion.style.display = "none"
+                const boton_registrarse = document.getElementById('reg')
+                boton_registrarse.style.display = "none"
+                const boton_cerrar_sesion = document.getElementById('c_ses')
+                boton_cerrar_sesion.style.display = "flex"
+
+            }
+        }
+
+        function cerrar_sesion(){
+
+            const id_usuario = localStorage.getItem('id_usuario')
+            fetch('http://localhost:3000/api/v1/usuarios/desautenticar/' + id_usuario, {
+                method: 'PUT'
+            })
+
+            const boton_inicio_sesion = document.getElementById('in_ses')
+            boton_inicio_sesion.style.display = "flex"
+            const boton_registrarse = document.getElementById('reg')
+            boton_registrarse.style.display = "flex"
+            const boton_cerrar_sesion = document.getElementById('c_ses')
+            boton_cerrar_sesion.style.display = "none"
+
+            localStorage.removeItem('id_usuario')
+        }
     </script>
 </body>
 </html>
