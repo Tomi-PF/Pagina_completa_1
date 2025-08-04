@@ -5,7 +5,7 @@ const bcrypt = require('bcrypt')
 // Crea un usuario
 const createUsuario = async (req, res) =>{
 
-    const {nombre, apellido, fecha_nacimiento, telefono, usuario, contraseña} = req.body
+    const {nombre, apellido, fecha_nacimiento, email, telefono, usuario, contraseña} = req.body
 
     if(!usuario || !contraseña){
         return res.status(400).json({
@@ -32,6 +32,7 @@ const createUsuario = async (req, res) =>{
                 nombre,
                 apellido,
                 fecha_nacimiento,
+                email,
                 telefono: parseInt(telefono),
                 usuario,
                 contraseña: contraseñaEncriptada
