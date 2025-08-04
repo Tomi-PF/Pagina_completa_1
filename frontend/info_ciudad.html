@@ -10,20 +10,29 @@
 <body>
 
     <div class="navbar">
+
         <nav class="navbar" role="navigation" aria-label="main navigation">
             <div class="navbar-brand">
                 <a href="index.html">
                     <img src="img/Logo.png" alt="Logo de Aterrizar" class="logo">
                 </a>
             </div>
-            <div id="navbarBasicExample" class="navbar-menu">
+
+            <div class="navbar-menu">
                 <div class="navbar-start">
                     <a href="index.html" class="navbar-item">Inicio</a>
                     <a href="alojamientos.html" class="navbar-item">Alojamientos</a>
                     <a href="reservas.html" class="navbar-item">Reservas</a>
                 </div>
+
+                <div class="navbar-end">
+                    <a href="iniciar_sesion.html" class="navbar-item" id="in_ses">Iniciar sesión</a>
+                    <a href="registrarse.html" class="navbar-item" id="reg">Registrarse</a>
+                    <a href="#" class="navbar-item" id="c_ses" style="display: none;" onclick="cerrar_sesion()">Cerrar sesión</a>
+                </div>
             </div>
         </nav>
+
     </div>
 
     <div class="content">
@@ -36,12 +45,13 @@
         
         <p id="datos-ciudad"></p>
 
-        <a class="button is-primary is-outlined" id="boton-modificar">Modificar datos ciudad<a/>
     </div>
 
-    <div id="botones-hotel">
-     <!-- Botón para redirigir a la página de crear hoteles -->
-        <a id="crear-hoteles" class="button is-primary is-outlined">Crear Hotel</a>
+    <div id="botones">
+        <a class="button is-primary is-outlined" id="boton-modificar" style="display: none;">Modificar datos ciudad<a/>
+    </div>
+    <div id="botones">
+        <a id="crear-hoteles" class="button is-primary is-outlined" style="display: none;">Crear Hotel</a>
         <a id="ver-hoteles" class="button is-primary is-outlined">Ver hoteles</a>
     </div>
 
@@ -50,6 +60,25 @@
     </footer>
 
     <script>
+
+        document.addEventListener('DOMContentLoaded', () => {
+
+            if(localStorage.getItem('id_usuario')){
+
+                const boton_inicio_sesion = document.getElementById('in_ses')
+                boton_inicio_sesion.style.display = "none"
+                const boton_registrarse = document.getElementById('reg')
+                boton_registrarse.style.display = "none"
+                const boton_cerrar_sesion = document.getElementById('c_ses')
+                boton_cerrar_sesion.style.display = "flex"
+                const boton_modificar = document.getElementById('boton-modificar')
+                boton_modificar.style.display = "block"
+                const boton_crear_hoteles = document.getElementById('crear-hoteles')
+                boton_crear_hoteles.style.display = "block"
+
+            }
+        })
+
         const parametros_url = new URLSearchParams(window.location.search)
         const id = parametros_url.get('id')
 
@@ -83,7 +112,29 @@
                 datos.innerText = `La ciudad de ${ciudad.nombre} se encuenta en la provincia de ${ciudad.provincia}. Fue fundada en el año ${ciudad.año_fundacion} y tiene un tamaño de ${ciudad.tamaño} km²`
             })
         }
+        
         crear_info_hotel()
+
+        function cerrar_sesion(){
+
+            const id_usuario = localStorage.getItem('id_usuario')
+            fetch('http://localhost:3000/api/v1/usuarios/desautenticar' + id_usuario, {
+                method: 'PUT'
+            })
+
+            const boton_inicio_sesion = document.getElementById('in_ses')
+            boton_inicio_sesion.style.display = "flex"
+            const boton_registrarse = document.getElementById('reg')
+            boton_registrarse.style.display = "flex"
+            const boton_cerrar_sesion = document.getElementById('c_ses')
+            boton_cerrar_sesion.style.display = "none"
+            const boton_modificar = document.getElementById('boton-modificar')
+            boton_modificar.style.display = "none"
+            const boton_crear_hoteles = document.getElementById('crear-hoteles')
+            boton_crear_hoteles.style.display = "none"
+
+            localStorage.removeItem('id_usuario')
+        }
     </script>
 
 </body>
