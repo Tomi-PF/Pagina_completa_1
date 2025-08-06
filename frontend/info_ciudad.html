@@ -6,6 +6,7 @@
     <title>Alojamientos - Aterrizar</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.2/css/bulma.min.css">
     <link rel="stylesheet" href="styles.css">
+    <script src="index.js"></script>
 </head>
 <body>
 
@@ -61,24 +62,6 @@
 
     <script>
 
-        document.addEventListener('DOMContentLoaded', () => {
-
-            if(localStorage.getItem('id_usuario')){
-
-                const boton_inicio_sesion = document.getElementById('in_ses')
-                boton_inicio_sesion.style.display = "none"
-                const boton_registrarse = document.getElementById('reg')
-                boton_registrarse.style.display = "none"
-                const boton_cerrar_sesion = document.getElementById('c_ses')
-                boton_cerrar_sesion.style.display = "flex"
-                const boton_modificar = document.getElementById('boton-modificar')
-                boton_modificar.style.display = "block"
-                const boton_crear_hoteles = document.getElementById('crear-hoteles')
-                boton_crear_hoteles.style.display = "block"
-
-            }
-        })
-
         const parametros_url = new URLSearchParams(window.location.search)
         const id = parametros_url.get('id')
 
@@ -115,26 +98,9 @@
         
         crear_info_hotel()
 
-        function cerrar_sesion(){
-
-            const id_usuario = localStorage.getItem('id_usuario')
-            fetch('http://localhost:3000/api/v1/usuarios/desautenticar' + id_usuario, {
-                method: 'PUT'
-            })
-
-            const boton_inicio_sesion = document.getElementById('in_ses')
-            boton_inicio_sesion.style.display = "flex"
-            const boton_registrarse = document.getElementById('reg')
-            boton_registrarse.style.display = "flex"
-            const boton_cerrar_sesion = document.getElementById('c_ses')
-            boton_cerrar_sesion.style.display = "none"
-            const boton_modificar = document.getElementById('boton-modificar')
-            boton_modificar.style.display = "none"
-            const boton_crear_hoteles = document.getElementById('crear-hoteles')
-            boton_crear_hoteles.style.display = "none"
-
-            localStorage.removeItem('id_usuario')
-        }
+    </script>
+    <script>
+        document.addEventListener('load', abrir_sesion())
     </script>
 
 </body>

@@ -6,6 +6,7 @@
     <title>Aterrizar</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.2/css/bulma.min.css">
     <link rel="stylesheet" href="styles.css"> <!-- Enlace al archivo CSS -->
+    <script src="index.js"></script>
 </head>
 
 <body>
@@ -179,8 +180,6 @@
         // Enviar formulario de reservas al backend
         document.addEventListener('DOMContentLoaded', () => {
 
-            cambiar_botones()
-
         // Selecciona el form
         const formReserva = document.getElementById('formReserva')
 
@@ -254,48 +253,12 @@
         datos_ciudades("Crear opciones ciudades")
         datos_ciudades("Crear opciones hoteles")
 
-        function cambiar_botones(){
-
-            if(localStorage.getItem('id_usuario')){
-
-                const boton_inicio_sesion = document.getElementById('in_ses')
-                boton_inicio_sesion.style.display = "none"
-                const boton_registrarse = document.getElementById('reg')
-                boton_registrarse.style.display = "none"
-                const boton_cerrar_sesion = document.getElementById('c_ses')
-                boton_cerrar_sesion.style.display = "flex"
-                const boton_gestionar_reservas = document.getElementById('gestionar_reservas')
-                boton_gestionar_reservas.style.display = "block"
-                const linea_divisoria = document.getElementById('linea_divisoria')
-                linea_divisoria.style.display = "flex"
-                
-            }
-        }
-
-        function cerrar_sesion(){
-            
-            const id_usuario = localStorage.getItem('id_usuario')
-            fetch('http://localhost:3000/api/v1/usuarios/desautenticar/' + id_usuario, {
-                method: 'PUT'
-            })
-
-            const boton_inicio_sesion = document.getElementById('in_ses')
-            boton_inicio_sesion.style.display = "flex"
-            const boton_registrarse = document.getElementById('reg')
-            boton_registrarse.style.display = "flex"
-            const boton_cerrar_sesion = document.getElementById('c_ses')
-            boton_cerrar_sesion.style.display = "none"
-            const boton_gestionar_reservas = document.getElementById('gestionar_reservas')
-            boton_gestionar_reservas.style.display = "none"
-            const linea_divisoria = document.getElementById('linea_divisoria')
-            linea_divisoria.style.display = "none"
-
-            localStorage.removeItem('id_usuario')
-        }
-
     </script>
     
     <script src="script.js"></script>
+    <script>
+        document.addEventListener('load', abrir_sesion())
+    </script>
 
 </body>
 </html>
