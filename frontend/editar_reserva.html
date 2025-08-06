@@ -220,7 +220,7 @@
             } catch (error) {
                 console.error('Error al cargar la reserva:', error)
                 alert('Error al cargar la reserva. Redirigiendo a la lista de reservas.')
-                window.location.href = 'gestionar-reservas.html' // Redirige a la página anterior
+                window.location.href = 'gestionar_reservas.html' // Redirige a la página anterior
             }
         }
 
@@ -233,7 +233,7 @@
             console.log("Reserva ID:", reservaId)
             if (!reservaId) {
             alert('No se recibió un ID de reserva. Redirigiendo.')
-            window.location.href = 'gestionar-reservas.html'
+            window.location.href = 'gestionar_reservas.html'
             return
             }
             
@@ -269,7 +269,7 @@
                 }
 
                 alert('Reserva actualizada con éxito')
-                window.location.href = 'gestionar-reservas.html'
+                window.location.href = 'gestionar_reservas.html'
                 
             } catch (error) {
                 console.error('Error al actualizar la reserva:', error)
