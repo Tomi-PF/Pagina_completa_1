@@ -149,3 +149,46 @@ function borrar_ciudad(id) {
         crear_card_ciudad()
     })
 }
+
+function limpiar_campos(){
+    document.getElementById('nombre_ciudad').value = '';
+    document.getElementById('foto_ciudad').value = '';
+    document.getElementById('provincia_ciudad').value = '';
+    document.getElementById('tamaño_ciudad').value = '';
+    document.getElementById('año_fundación').value = '';
+}
+        
+function enviar_datos(){
+
+    event.preventDefault()
+    
+    const nombre_ciudad = document.getElementById('nombre_ciudad').value;
+    const foto_ciudad = document.getElementById('foto_ciudad').value;
+    const provincia_ciudad = document.getElementById('provincia_ciudad').value;
+    const tamaño_ciudad = document.getElementById('tamaño_ciudad').value;
+    const año_fundación = document.getElementById('año_fundación').value;
+
+    let datos_creacion = {
+        nombre: nombre_ciudad,
+        foto_ciudad: foto_ciudad,
+        provincia: provincia_ciudad,
+        tamaño: parseFloat(tamaño_ciudad),
+        año_fundacion: parseInt(año_fundación)
+    };
+
+    fetch('http://localhost:3000/api/v1/ciudades/', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(datos_creacion)
+    })
+    .then(response => {
+        if (response.status === 201) {
+            alert("Ciudad creada con éxito");
+            limpiar_campos()
+        } else {
+            alert("No se pudo crear la ciudad");
+        }
+    })
+}
