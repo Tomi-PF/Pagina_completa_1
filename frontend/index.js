@@ -69,6 +69,7 @@ function cerrar_sesion(){
 }
 
 // FUNCIONES DE LAS SECCINES DE LA PÁGINA:
+// Sección "alojamientos"
 function crear_card_ciudad() {
     const container = document.getElementById('ciudadesContainer')
     const mensaje = document.getElementById('mensajeError')
@@ -150,6 +151,7 @@ function borrar_ciudad(id) {
     })
 }
 
+// Sección "crear_ciudades"
 function limpiar_campos(){
     document.getElementById('nombre_ciudad').value = '';
     document.getElementById('foto_ciudad').value = '';
