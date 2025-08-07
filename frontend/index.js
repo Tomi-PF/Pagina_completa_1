@@ -97,8 +97,8 @@ function crear_card_ciudad() {
                 Boton_info.href = `info_ciudad.html?id=${ciudad.id}`
             })
             // Creación del Botón para borrar la ciudad si el usuario inició sesión
+            const Boton_borrar = document.createElement('a')
             if(localStorage.getItem('id_usuario')){
-                const Boton_borrar = document.createElement('a')
                 Boton_borrar.setAttribute("class", "button is-danger is-outlined")
                 Boton_borrar.innerText = "Borrar ciudad"
                 Boton_borrar.addEventListener('click', () => {
@@ -144,10 +144,7 @@ function borrar_ciudad(id) {
     })
     .then(response => response.json())
     .then(ciudad => {
-        const contenedor_mensaje = document.getElementById('mensaje_eliminar')
-        contenedor_mensaje.style.display = "flex"
-        const contenedor_texto = document.getElementById('mensaje')
-        contenedor_texto.innerText = `La ciudad ${ciudad.nombre} ha sido borrada`
+        alert(`La ciudad ${ciudad.nombre} ha sido borrada`)
         container.innerText = ''
         crear_card_ciudad()
     })
