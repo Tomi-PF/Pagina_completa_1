@@ -491,7 +491,7 @@ function eliminar_reserva(){
 }
 
 // Sección "info_ciudad"
-function crear_info_hotel() {
+function crear_info_ciudad() {
 
     const id = localStorage.getItem('id_ciudad')
 
