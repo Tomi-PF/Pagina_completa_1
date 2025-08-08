@@ -264,3 +264,144 @@ function enviar_datos(){
 
     }
 }
+
+// Sección "editar_reserva"
+function editar_reserva(){
+    const reservaId = localStorage.getItem('id_reserva')
+    console.log("Reserva ID:", reservaId)
+    if (!reservaId) {
+        alert('No se recibió un ID de reserva. Redirigiendo.')
+        window.location.href = 'gestionar_reservas.html'
+        return
+    }
+    
+    configurarCambioCiudad()
+    // Carga los datos de la resevra
+    cargarDatosReserva(reservaId)
+
+    const formReserva = document.getElementById('formReserva')
+    formReserva.addEventListener('submit', async (event) => {
+        event.preventDefault()
+        const datosReserva = {
+            nombre_completo: document.getElementById('nombre').value.trim(),
+            email: document.getElementById('email').value.trim(),
+            numero_contacto: parseInt(document.getElementById('numContacto').value.trim(), 10),
+            id_ciudad: parseInt(document.getElementById('seleccionar-ciudad').value, 10),
+            id_hotel: parseInt(document.getElementById('seleccionar-hotel').value, 10),
+            cant_personas: parseInt(document.getElementById('numero').value, 10),
+            cant_habitaciones: parseInt(document.getElementById('numero2').value, 10),
+            fecha_ingreso: document.getElementById('fecha-entrada').value,
+            fecha_salida: document.getElementById('fecha-salida').value
+        }
+
+        try {
+            const response = await fetch('http://localhost:3000/api/v1/reservas/' + reservaId, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(datosReserva)
+            })
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.error || 'Error al actualizar la reserva')
+            }
+
+            alert('Reserva actualizada con éxito')
+            window.location.href = 'gestionar_reservas.html'
+            
+        } catch (error) {
+            console.error('Error al actualizar la reserva:', error)
+            alert('Error al actualizar la reserva: ' + error.message)
+        }
+    })
+}
+
+function seleccionarOpcion(selectId, valueToSelect) {
+    const selectElement = document.getElementById(selectId)
+    for (let i = 0; i < selectElement.options.length; i++) {
+        if (selectElement.options[i].value == valueToSelect) {
+            selectElement.selectedIndex = i;
+            break;
+        }
+    }
+}
+
+function cargarCiudades(callback) {
+    const opciones_ciudad = document.getElementById('seleccionar-ciudad')
+    // Limpia el select
+    opciones_ciudad.innerHTML = '<option value="" disabled selected>Ciudad destino</option>'
+
+    fetch('http://localhost:3000/api/v1/ciudades/')
+    .then(response => response.json())
+    .then(ciudades => {
+        ciudades.forEach(ciudad => {
+            const option = document.createElement('option')
+            option.innerText = ciudad.nombre
+            option.value = ciudad.id
+            opciones_ciudad.appendChild(option)
+        })
+        if (typeof callback === 'function') callback()
+    })
+    .catch(error => console.error('Error al cargar ciudades:', error))
+}
+
+function configurarCambioCiudad() {
+    const opciones_ciudad = document.getElementById('seleccionar-ciudad');
+    const opciones_hotel = document.getElementById('seleccionar-hotel');
+    
+    opciones_ciudad.onchange = () => {
+        const opcion_elegida = opciones_ciudad.options[opciones_ciudad.selectedIndex]
+        const nombreCiudad = opcion_elegida.innerText
+        const id_ciudad = opcion_elegida.value
+        
+        opciones_hotel.innerHTML = '<option value="" disabled selected>Hotel</option>'
+        fetch('http://localhost:3000/api/v1/hoteles/' + encodeURIComponent(nombreCiudad) + '/' + id_ciudad)
+        .then(response => response.json())
+        .then(hoteles => {
+            hoteles.forEach(hotel => {
+                const option = document.createElement('option')
+                option.innerText = hotel.nombre
+                option.value = hotel.id
+                opciones_hotel.appendChild(option)
+            })
+        })
+        .catch(error => console.error('Error al cargar hoteles:', error))
+    }
+}
+
+async function cargarDatosReserva(reservaId) {
+    try {
+        const response = await fetch('http://localhost:3000/api/v1/reservas/' + reservaId)
+        if (!response.ok) {
+            throw new Error('No se pudo obtener la reserva')
+        }
+        const reserva = await response.json();
+
+
+        document.getElementById('nombre').value = reserva.nombre_completo
+        document.getElementById('email').value = reserva.email
+        document.getElementById('numContacto').value = reserva.numero_contacto
+        document.getElementById('numero').value = reserva.cant_personas
+        document.getElementById('numero2').value = reserva.cant_habitaciones
+        document.getElementById('fecha-entrada').value = reserva.fecha_ingreso
+        document.getElementById('fecha-salida').value = reserva.fecha_salida
+
+        // Carga opciones de ciudades y selecciona la ciudad correcta
+        cargarCiudades(() => {
+            seleccionarOpcion('seleccionar-ciudad', reserva.id_ciudad)
+            
+            const ciudadSelect = document.getElementById('seleccionar-ciudad')
+            ciudadSelect.dispatchEvent(new Event('change'))
+
+            // Espera un poco hasta que se carguen los hoteles
+            setTimeout(() => {
+                seleccionarOpcion('seleccionar-hotel', reserva.id_hotel)
+            }, 500)
+        })
+
+    } catch (error) {
+        console.error('Error al cargar la reserva:', error)
+        alert('Error al cargar la reserva. Redirigiendo a la lista de reservas.')
+        window.location.href = 'gestionar_reservas.html' // Redirige a la página anterior
+    }
+}
