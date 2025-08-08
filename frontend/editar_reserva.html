@@ -113,7 +113,7 @@
                         <input name="fecha-salida" id="fecha-salida" type="date" required>
                     </div>
                 </div>
-                <button type="submit">Enviar</button>
+                <button onclick="editar_datos_reserva()">Enviar</button>
             </form>
         </div>
 
@@ -126,7 +126,7 @@
     
     <script>
         document.addEventListener('load', abrir_sesion())
-        document.addEventListener('load', editar_reserva())
+        document.addEventListener('load', cargar_datos_reserva())
     </script>
 
     <script src="script.js"></script>

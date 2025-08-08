@@ -266,55 +266,47 @@ function enviar_datos(){
 }
 
 // Sección "editar_reserva"
-function editar_reserva(){
+function cargar_datos_reserva(){
     const reservaId = localStorage.getItem('id_reserva')
-    console.log("Reserva ID:", reservaId)
-    if (!reservaId) {
-        alert('No se recibió un ID de reserva. Redirigiendo.')
-        window.location.href = 'gestionar_reservas.html'
-        return
-    }
-    
     configurarCambioCiudad()
-    // Carga los datos de la resevra
     cargarDatosReserva(reservaId)
+}
 
-    const formReserva = document.getElementById('formReserva')
-    formReserva.addEventListener('submit', () => {
-        event.preventDefault()
-        const datosReserva = {
-            nombre_completo: document.getElementById('nombre').value.trim(),
-            email: document.getElementById('email').value.trim(),
-            numero_contacto: parseInt(document.getElementById('numContacto').value.trim(), 10),
-            id_ciudad: parseInt(document.getElementById('seleccionar-ciudad').value, 10),
-            id_hotel: parseInt(document.getElementById('seleccionar-hotel').value, 10),
-            cant_personas: parseInt(document.getElementById('numero').value, 10),
-            cant_habitaciones: parseInt(document.getElementById('numero2').value, 10),
-            fecha_ingreso: document.getElementById('fecha-entrada').value,
-            fecha_salida: document.getElementById('fecha-salida').value
-        }
+function editar_datos_reserva(){
+    const reservaId = localStorage.getItem('id_reserva')
+    event.preventDefault()
+    const datosReserva = {
+        nombre_completo: document.getElementById('nombre').value.trim(),
+        email: document.getElementById('email').value.trim(),
+        numero_contacto: parseInt(document.getElementById('numContacto').value.trim(), 10),
+        id_ciudad: parseInt(document.getElementById('seleccionar-ciudad').value, 10),
+        id_hotel: parseInt(document.getElementById('seleccionar-hotel').value, 10),
+        cant_personas: parseInt(document.getElementById('numero').value, 10),
+        cant_habitaciones: parseInt(document.getElementById('numero2').value, 10),
+        fecha_ingreso: document.getElementById('fecha-entrada').value,
+        fecha_salida: document.getElementById('fecha-salida').value
+    }
 
-        try {
-            fetch('http://localhost:3000/api/v1/reservas/' + reservaId, {
-                method: 'PUT',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(datosReserva)
-            })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error(errorData.error || 'Error al actualizar la reserva')
-                }
-                return response.json()
-            })
+    try {
+        fetch('http://localhost:3000/api/v1/reservas/' + reservaId, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(datosReserva)
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(errorData.error || 'Error al actualizar la reserva')
+            }
+            return response.json()
+        })
 
-            alert('Reserva actualizada con éxito')
-            window.location.href = 'gestionar_reservas.html'
-            
-        } catch (error) {
-            console.error('Error al actualizar la reserva:', error)
-            alert('Error al actualizar la reserva: ' + error.message)
-        }
-    })
+        alert('Reserva actualizada con éxito')
+        window.location.href = 'gestionar_reservas.html'
+        
+    } catch (error) {
+        console.error('Error al actualizar la reserva:', error)
+        alert('Error al actualizar la reserva: ' + error.message)
+    }
 }
 
 function seleccionarOpcion(selectId, valueToSelect) {
