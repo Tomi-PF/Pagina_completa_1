@@ -95,7 +95,8 @@ function crear_card_ciudad() {
             Boton_info.innerText = "Ver info"
             Boton_info.style.marginBottom = "10px"
             Boton_info.addEventListener('click', () => {
-                Boton_info.href = `info_ciudad.html?id=${ciudad.id}`
+                localStorage.setItem('id_ciudad', parseInt(ciudad.id))
+                Boton_info.href = 'info_ciudad.html'
             })
             // Creación del Botón para borrar la ciudad si el usuario inició sesión
             const Boton_borrar = document.createElement('a')
