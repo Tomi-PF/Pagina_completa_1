@@ -369,34 +369,36 @@ function configurarCambioCiudad() {
     }
 }
 
-async function cargarDatosReserva(reservaId) {
+function cargarDatosReserva(reservaId) {
     try {
-        const response = await fetch('http://localhost:3000/api/v1/reservas/' + reservaId)
-        if (!response.ok) {
-            throw new Error('No se pudo obtener la reserva')
-        }
-        const reserva = await response.json();
+        fetch('http://localhost:3000/api/v1/reservas/' + reservaId)
+        .then(response => {
+            if(!response.ok){
+                throw new Error('No se pudo obtener la reserva')
+            }
+            return response.json()
+        })
+        .then(reserva => {
+            document.getElementById('nombre').value = reserva.nombre_completo
+            document.getElementById('email').value = reserva.email
+            document.getElementById('numContacto').value = reserva.numero_contacto
+            document.getElementById('numero').value = reserva.cant_personas
+            document.getElementById('numero2').value = reserva.cant_habitaciones
+            document.getElementById('fecha-entrada').value = reserva.fecha_ingreso
+            document.getElementById('fecha-salida').value = reserva.fecha_salida
 
+            // Carga opciones de ciudades y selecciona la ciudad correcta
+            cargarCiudades(() => {
+                seleccionarOpcion('seleccionar-ciudad', reserva.id_ciudad)
+                
+                const ciudadSelect = document.getElementById('seleccionar-ciudad')
+                ciudadSelect.dispatchEvent(new Event('change'))
 
-        document.getElementById('nombre').value = reserva.nombre_completo
-        document.getElementById('email').value = reserva.email
-        document.getElementById('numContacto').value = reserva.numero_contacto
-        document.getElementById('numero').value = reserva.cant_personas
-        document.getElementById('numero2').value = reserva.cant_habitaciones
-        document.getElementById('fecha-entrada').value = reserva.fecha_ingreso
-        document.getElementById('fecha-salida').value = reserva.fecha_salida
-
-        // Carga opciones de ciudades y selecciona la ciudad correcta
-        cargarCiudades(() => {
-            seleccionarOpcion('seleccionar-ciudad', reserva.id_ciudad)
-            
-            const ciudadSelect = document.getElementById('seleccionar-ciudad')
-            ciudadSelect.dispatchEvent(new Event('change'))
-
-            // Espera un poco hasta que se carguen los hoteles
-            setTimeout(() => {
-                seleccionarOpcion('seleccionar-hotel', reserva.id_hotel)
-            }, 500)
+                // Espera un poco hasta que se carguen los hoteles
+                setTimeout(() => {
+                    seleccionarOpcion('seleccionar-hotel', reserva.id_hotel)
+                }, 500)
+            })
         })
 
     } catch (error) {
