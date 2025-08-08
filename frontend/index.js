@@ -280,7 +280,7 @@ function editar_reserva(){
     cargarDatosReserva(reservaId)
 
     const formReserva = document.getElementById('formReserva')
-    formReserva.addEventListener('submit', async (event) => {
+    formReserva.addEventListener('submit', () => {
         event.preventDefault()
         const datosReserva = {
             nombre_completo: document.getElementById('nombre').value.trim(),
@@ -295,16 +295,17 @@ function editar_reserva(){
         }
 
         try {
-            const response = await fetch('http://localhost:3000/api/v1/reservas/' + reservaId, {
+            fetch('http://localhost:3000/api/v1/reservas/' + reservaId, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(datosReserva)
             })
-
-            if (!response.ok) {
-                const errorData = await response.json();
-                throw new Error(errorData.error || 'Error al actualizar la reserva')
-            }
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(errorData.error || 'Error al actualizar la reserva')
+                }
+                return response.json()
+            })
 
             alert('Reserva actualizada con éxito')
             window.location.href = 'gestionar_reservas.html'
