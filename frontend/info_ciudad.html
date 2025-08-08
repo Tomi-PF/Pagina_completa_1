@@ -52,8 +52,8 @@
         <a class="button is-primary is-outlined" id="boton-modificar" style="display: none;">Modificar datos ciudad<a/>
     </div>
     <div id="botones">
-        <a id="crear-hoteles" class="button is-primary is-outlined" style="display: none;">Crear Hotel</a>
-        <a id="ver-hoteles" class="button is-primary is-outlined">Ver hoteles</a>
+        <a id="crear-hoteles" class="button is-primary is-outlined" style="display: none;" onclick="crear_hotel()">Crear Hotel</a>
+        <a id="ver-hoteles" class="button is-primary is-outlined" onclick="ver_hoteles()">Ver hoteles</a>
     </div>
 
     <footer>
@@ -61,49 +61,9 @@
     </footer>
 
     <script>
-
-        const parametros_url = new URLSearchParams(window.location.search)
-        const id = parametros_url.get('id')
-
-        const boton_crear_hotel = document.getElementById('crear-hoteles')
-        boton_crear_hotel.addEventListener('click', () => {
-            boton_crear_hotel.href = `crear_hoteles.html?id=${id}`
-        }) 
-        const boton_ver_hoteles = document.getElementById('ver-hoteles')
-        boton_ver_hoteles.addEventListener('click', () => {
-            boton_ver_hoteles.href = `ver_hoteles.html?id=${id}`
-        })
-        
-        function crear_info_hotel() {
-            fetch('http://localhost:3000/api/v1/ciudades/' + parseInt(id))
-            .then(response => response.json())
-            .then(ciudad => {
-                const titulo = document.getElementById('titulo-ciudad')
-                titulo.innerText = `Información de la ciudad: ${ciudad.nombre}`
-
-                const foto = document.getElementById('foto-ciudad')
-                foto.setAttribute("src", ciudad.foto_ciudad)
-                foto.setAttribute("alt", `Imagen de la ciudad de ${ciudad.nombre}`)
-                
-                const boton_modificar = document.getElementById("boton-modificar")
-                boton_modificar.setAttribute("class", "button is-primary is-outlined")
-                boton_modificar.addEventListener('click', () => {
-                    boton_modificar.href = `modificar_ciudad.html?id=${ciudad.id}`
-                })
-
-                const datos = document.getElementById('datos-ciudad')
-                datos.innerText = `La ciudad de ${ciudad.nombre} se encuenta en la provincia de ${ciudad.provincia}. Fue fundada en el año ${ciudad.año_fundacion} y tiene un tamaño de ${ciudad.tamaño} km²`
-            })
-        }
-        
-        crear_info_hotel()
-
-    </script>
-    <script>
         document.addEventListener('load', abrir_sesion())
+        document.addEventListener('load', crear_info_hotel())
     </script>
 
 </body>
 </html>
-
-

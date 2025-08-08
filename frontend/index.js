@@ -489,3 +489,37 @@ function eliminar_reserva(){
         }
     }
 }
+
+// Sección "info_ciudad"
+function crear_info_hotel() {
+
+    const id = localStorage.getItem('id_ciudad')
+
+    fetch('http://localhost:3000/api/v1/ciudades/' + parseInt(id))
+    .then(response => response.json())
+    .then(ciudad => {
+        const titulo = document.getElementById('titulo-ciudad')
+        titulo.innerText = `Información de la ciudad: ${ciudad.nombre}`
+
+        const foto = document.getElementById('foto-ciudad')
+        foto.setAttribute("src", ciudad.foto_ciudad)
+        foto.setAttribute("alt", `Imagen de la ciudad de ${ciudad.nombre}`)
+        
+        const boton_modificar = document.getElementById("boton-modificar")
+        boton_modificar.setAttribute("class", "button is-primary is-outlined")
+        boton_modificar.addEventListener('click', () => {
+            boton_modificar.href = 'modificar_ciudad.html'
+        })
+
+        const datos = document.getElementById('datos-ciudad')
+        datos.innerText = `La ciudad de ${ciudad.nombre} se encuenta en la provincia de ${ciudad.provincia}. Fue fundada en el año ${ciudad.año_fundacion} y tiene un tamaño de ${ciudad.tamaño} km²`
+    })
+}
+
+function crear_hotel(){
+    window.location.href = 'crear_hoteles.html'
+}
+
+function ver_hoteles(){
+    window.location.href = 'ver_hoteles.html'
+}
