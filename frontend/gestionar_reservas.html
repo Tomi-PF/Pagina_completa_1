@@ -50,12 +50,12 @@
     <!-- Modal para ver detalles -->
     <div id="modal-reserva" class="modal">
         <div class="modal-content">
-            <span class="close-modal">&times;</span>
+            <span class="close-modal" onclick="cerrar_modal()">&times;</span>
             <h2 id="modal-titulo"></h2>
             <div id="modal-info"></div>
             <div class="modal-buttons">
-                <button id="button-editar" class="button is-primary">Editar</button>
-                <button id="button-eliminar" class="button is-danger">Eliminar</button>
+                <button id="button-editar" class="button is-primary" onclick="editar_reserva()">Editar</button>
+                <button id="button-eliminar" class="button is-danger" onclick="eliminar_reserva()">Eliminar</button>
             </div>
         </div>
     </div>
@@ -65,104 +65,8 @@
     </footer>
 
     <script>
-        let reservaSeleccionada = null;
-
-        // Cargar reservas al iniciar la página
-        document.addEventListener('DOMContentLoaded', async () => {
-
-            await cargarReservas()
-        })
-
-        // Obtener reservas desde el backend
-        async function cargarReservas() {
-            try {
-                const response = await fetch('http://localhost:3000/api/v1/reservas')
-                const reservas = await response.json()
-                renderizarReservas(reservas)
-
-            } catch (error) {
-                console.error('Error:', error)
-                alert('Error al cargar reservas')
-            }
-        }
-
-        // Renderizar lista de reservas
-        function renderizarReservas(reservas) {
-            const contenedor = document.getElementById('lista-reservas')
-            contenedor.innerHTML = ''
-
-            reservas.forEach(reserva => {
-                const reservaElement = document.createElement('div')
-                reservaElement.className = 'reserva-item'
-                
-                reservaElement.innerHTML = `
-                    <p><strong>ID:</strong> ${reserva.id}</p>
-                    <p><strong>Nombre:</strong> ${reserva.nombre_completo}</p>
-                    <p><strong>Ciudad:</strong> ${reserva.ciudad.nombre}</p>
-                    <p><strong>Hotel:</strong> ${reserva.hotel.nombre}</p>
-                `;
-                
-                reservaElement.addEventListener('click', () => abrirModal(reserva))
-                contenedor.appendChild(reservaElement)
-            });
-        }
-
-        // Mostrar modal con detalles
-        function abrirModal(reserva) {
-            reservaSeleccionada = reserva;
-            const modal = document.getElementById('modal-reserva')
-
-            modal.style.display = 'flex'
-
-            // Número de reserva
-            document.getElementById('modal-titulo').innerHTML = `<strong>Reserva #${reserva.id}</strong>`
-            
-            // Detalles de la reserva
-            document.getElementById('modal-info').innerHTML = `
-                <p><strong>Email:</strong> ${reserva.email}</p>
-                <p><strong>Contacto:</strong> ${reserva.numero_contacto}</p>
-                <p><strong>Personas:</strong> ${reserva.cant_personas}</p>
-                <p><strong>Habitaciones:</strong> ${reserva.cant_habitaciones}</p>
-                <p><strong>Fecha de ingreso:</strong> ${reserva.fecha_ingreso}</p>
-                <p><strong>Fecha de salida:</strong> ${reserva.fecha_salida}</p>
-            `
-        }
-
-        // Botones del modal
-        // Cerrar modal
-        document.querySelector('.close-modal').addEventListener('click', () => {
-            document.getElementById('modal-reserva').style.display = 'none'
-        })
-
-        // Editar reserva
-        document.getElementById('button-editar').addEventListener('click', () => {
-            window.location.href = `editar_reserva.html?id=${reservaSeleccionada.id}`
-        })
-
-        // Eliminar reserva
-        document.getElementById('button-eliminar').addEventListener('click', async () => {
-            if (confirm('¿Estás seguro de eliminar esta reserva?')) {
-                try {
-                    const response = await fetch(`http://localhost:3000/api/v1/reservas/${reservaSeleccionada.id}`, {
-                        method: 'DELETE'
-                    })
-                    
-                    if (response.ok) {
-                        alert('Reserva eliminada')
-                        document.getElementById('modal-reserva').style.display = 'none'
-                        await cargarReservas()
-                    }
-
-                } catch (error) {
-                    console.error('Error:', error)
-                    alert('Error al eliminar reserva')
-                }
-            }
-        })
-
-    </script>
-    <script>
         document.addEventListener('load', abrir_sesion())
+        document.addEventListener('load', cargarReservas())
     </script>
 </body>
 </html>

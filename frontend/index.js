@@ -1,3 +1,5 @@
+let reservaSeleccionada = null;
+
 // FUNCIONES DE LA NAVBAR:
 function abrir_sesion(){
 
@@ -398,5 +400,92 @@ function cargarDatosReserva(reservaId) {
         console.error('Error al cargar la reserva:', error)
         alert('Error al cargar la reserva. Redirigiendo a la lista de reservas.')
         window.location.href = 'gestionar_reservas.html' // Redirige a la página anterior
+    }
+}
+
+// Sección "gestionar_reservas"
+function cargarReservas() {
+    try {
+        fetch('http://localhost:3000/api/v1/reservas')
+        .then(response => response.json())
+        .then(reservas => {
+            renderizarReservas(reservas)
+        })
+
+    } catch (error) {
+        console.error('Error:', error)
+        alert('Error al cargar reservas')
+    }
+}
+
+function renderizarReservas(reservas) {
+    const contenedor = document.getElementById('lista-reservas')
+    contenedor.innerHTML = ''
+
+    reservas.forEach(reserva => {
+        const reservaElement = document.createElement('div')
+        reservaElement.className = 'reserva-item'
+        
+        reservaElement.innerHTML = `
+            <p><strong>ID:</strong> ${reserva.id}</p>
+            <p><strong>Nombre:</strong> ${reserva.nombre_completo}</p>
+            <p><strong>Ciudad:</strong> ${reserva.ciudad.nombre}</p>
+            <p><strong>Hotel:</strong> ${reserva.hotel.nombre}</p>
+        `;
+        
+        reservaElement.addEventListener('click', () => abrirModal(reserva))
+        contenedor.appendChild(reservaElement)
+    });
+}
+
+function abrirModal(reserva) {
+    reservaSeleccionada = reserva;
+    const modal = document.getElementById('modal-reserva')
+
+    modal.style.display = 'flex'
+
+    // Número de reserva
+    document.getElementById('modal-titulo').innerHTML = `<strong>Reserva #${reserva.id}</strong>`
+    localStorage.setItem('id_reserva', parseInt(reserva.id))
+    
+    // Detalles de la reserva
+    document.getElementById('modal-info').innerHTML = `
+        <p><strong>Email:</strong> ${reserva.email}</p>
+        <p><strong>Contacto:</strong> ${reserva.numero_contacto}</p>
+        <p><strong>Personas:</strong> ${reserva.cant_personas}</p>
+        <p><strong>Habitaciones:</strong> ${reserva.cant_habitaciones}</p>
+        <p><strong>Fecha de ingreso:</strong> ${reserva.fecha_ingreso}</p>
+        <p><strong>Fecha de salida:</strong> ${reserva.fecha_salida}</p>
+    `
+}
+
+function cerrar_modal(){
+    document.getElementById('modal-reserva').style.display = 'none'
+}
+
+function editar_reserva(){
+    window.location.href = 'editar_reserva.html'
+}
+
+function eliminar_reserva(){
+
+    if (confirm('¿Estás seguro de eliminar esta reserva?')) {
+        try {
+            fetch('http://localhost:3000/api/v1/reservas/' + reservaSeleccionada.id, {
+                method: 'DELETE'
+            })
+            .then(response => {
+
+                if(response.ok){
+                    alert('Reserva eliminada')
+                    document.getElementById('modal-reserva').style.display = 'none'
+                    cargarReservas()
+                }
+            })
+            
+        } catch (error) {
+            console.error('Error:', error)
+            alert('Error al eliminar reserva')
+        }
     }
 }
