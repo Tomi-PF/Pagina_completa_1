@@ -152,46 +152,115 @@ function borrar_ciudad(id) {
     })
 }
 
-// Sección "crear_ciudades"
+// Sección "crear_ciudades" y "crear_hoteles"
 function limpiar_campos(){
-    document.getElementById('nombre_ciudad').value = '';
-    document.getElementById('foto_ciudad').value = '';
-    document.getElementById('provincia_ciudad').value = '';
-    document.getElementById('tamaño_ciudad').value = '';
-    document.getElementById('año_fundación').value = '';
+    
+    const ruta_actual = window.location.pathname;
+
+    if(ruta_actual === '/crear_ciudades'){
+
+        document.getElementById('nombre_ciudad').value = '';
+        document.getElementById('foto_ciudad').value = '';
+        document.getElementById('provincia_ciudad').value = '';
+        document.getElementById('tamaño_ciudad').value = '';
+        document.getElementById('año_fundación').value = '';
+
+    }else if(ruta_actual === '/crear_hoteles'){
+        
+        document.getElementById('nombre_hotel').value = '';
+        document.getElementById('foto_hotel').value = '';
+        document.getElementById('cant_estrellas').value = '';
+        document.getElementById('cant_habitaciones').value = '';
+        document.getElementById('precio_noche').value = '';
+        document.getElementById('calle').value = '';
+        document.getElementById('num_calle').value = '';
+        document.getElementById('telefono').value = '';
+
+    }
 }
         
 function enviar_datos(){
 
     event.preventDefault()
-    
-    const nombre_ciudad = document.getElementById('nombre_ciudad').value;
-    const foto_ciudad = document.getElementById('foto_ciudad').value;
-    const provincia_ciudad = document.getElementById('provincia_ciudad').value;
-    const tamaño_ciudad = document.getElementById('tamaño_ciudad').value;
-    const año_fundación = document.getElementById('año_fundación').value;
+    const ruta_actual = window.location.pathname;
 
-    let datos_creacion = {
-        nombre: nombre_ciudad,
-        foto_ciudad: foto_ciudad,
-        provincia: provincia_ciudad,
-        tamaño: parseFloat(tamaño_ciudad),
-        año_fundacion: parseInt(año_fundación)
-    };
+    if(ruta_actual === '/crear_ciudades'){
+        
+        const nombre_ciudad = document.getElementById('nombre_ciudad').value;
+        const foto_ciudad = document.getElementById('foto_ciudad').value;
+        const provincia_ciudad = document.getElementById('provincia_ciudad').value;
+        const tamaño_ciudad = document.getElementById('tamaño_ciudad').value;
+        const año_fundación = document.getElementById('año_fundación').value;
 
-    fetch('http://localhost:3000/api/v1/ciudades/', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(datos_creacion)
-    })
-    .then(response => {
-        if (response.status === 201) {
-            alert("Ciudad creada con éxito");
-            limpiar_campos()
-        } else {
-            alert("No se pudo crear la ciudad");
-        }
-    })
+        let datos_creacion = {
+            nombre: nombre_ciudad,
+            foto_ciudad: foto_ciudad,
+            provincia: provincia_ciudad,
+            tamaño: parseFloat(tamaño_ciudad),
+            año_fundacion: parseInt(año_fundación)
+        };
+
+        fetch('http://localhost:3000/api/v1/ciudades/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(datos_creacion)
+        })
+        .then(response => {
+            if (response.status === 201) {
+                alert("Ciudad creada con éxito");
+                limpiar_campos()
+            } else {
+                alert("No se pudo crear la ciudad");
+            }
+        })
+
+    }else if(ruta_actual === '/crear_hoteles'){
+
+        const id = localStorage.getItem('id_ciudad')
+
+        // Rellena el campo de ciudad con el ID de la ciudad seleccionada
+        document.getElementById('id_ciudad').value = id;
+
+        const nombre_hotel = document.getElementById('nombre_hotel').value;
+        const foto_hotel = document.getElementById('foto_hotel').value;
+        const cant_estrellas = document.getElementById('cant_estrellas').value;
+        const cant_habitaciones = document.getElementById('cant_habitaciones').value;
+        const precio_noche = document.getElementById('precio_noche').value;
+        const calle = document.getElementById('calle').value;
+        const num_calle = document.getElementById('num_calle').value;
+        const telefono = document.getElementById('telefono').value;
+        const id_ciudad = document.getElementById('id_ciudad').value;
+
+        let datos_creacion = { 
+            nombre: nombre_hotel,
+            foto_hotel: foto_hotel,
+            id_ciudad: parseInt(id_ciudad),
+            cant_estrellas: parseInt(cant_estrellas),
+            cant_habitaciones: parseInt(cant_habitaciones),
+            precio_noche: parseInt(precio_noche),
+            calle: calle,
+            num_calle: parseInt(num_calle),
+            telefono: parseInt(telefono)
+        };
+        console.log(datos_creacion)
+
+        fetch('http://localhost:3000/api/v1/hoteles/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(datos_creacion)
+        })
+        .then(response => {
+            if (response.status === 201) {
+                alert("Hotel creado con éxito");
+                limpiar_campos();
+            } else {
+                alert("No se pudo crear el hotel");
+            }
+        });
+
+    }
 }

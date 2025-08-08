@@ -95,68 +95,6 @@
     </footer>
 
     <script>
-
-        const urlParams = new URLSearchParams(window.location.search);
-        const ciudadId = urlParams.get('id');
-
-        // Rellenar el campo de ciudad con el ID de la ciudad seleccionada
-        document.getElementById('id_ciudad').value = ciudadId;
-
-        function limpiar_campos(){
-            document.getElementById('nombre_hotel').value = '';
-            document.getElementById('foto_hotel').value = '';
-            document.getElementById('cant_estrellas').value = '';
-            document.getElementById('cant_habitaciones').value = '';
-            document.getElementById('precio_noche').value = '';
-            document.getElementById('calle').value = '';
-            document.getElementById('num_calle').value = '';
-            document.getElementById('telefono').value = '';
-        }
-
-        function enviar_datos(){
-            event.preventDefault();
-
-            const nombre_hotel = document.getElementById('nombre_hotel').value;
-            const foto_hotel = document.getElementById('foto_hotel').value;
-            const cant_estrellas = document.getElementById('cant_estrellas').value;
-            const cant_habitaciones = document.getElementById('cant_habitaciones').value;
-            const precio_noche = document.getElementById('precio_noche').value;
-            const calle = document.getElementById('calle').value;
-            const num_calle = document.getElementById('num_calle').value;
-            const telefono = document.getElementById('telefono').value;
-            const id_ciudad = document.getElementById('id_ciudad').value;
-
-            let datos_creacion = { 
-                nombre: nombre_hotel,
-                foto_hotel: foto_hotel,
-                id_ciudad: parseInt(id_ciudad),
-                cant_estrellas: parseInt(cant_estrellas),
-                cant_habitaciones: parseInt(cant_habitaciones),
-                precio_noche: parseInt(precio_noche),
-                calle: calle,
-                num_calle: parseInt(num_calle),
-                telefono: parseInt(telefono)
-            };
-            console.log(datos_creacion)
-
-            fetch('http://localhost:3000/api/v1/hoteles/', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(datos_creacion)
-            }).then(response => {
-                if (response.status === 201) {
-                    alert("Hotel creado con éxito");
-                    limpiar_campos();
-                } else {
-                    alert("No se pudo crear el hotel");
-                }
-            });
-        }
-
-    </script>
-    <script>
         document.addEventListener('load', abrir_sesion())
     </script>
 </body>
