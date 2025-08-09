@@ -523,3 +523,26 @@ function crear_hotel(){
 function ver_hoteles(){
     window.location.href = 'ver_hoteles.html'
 }
+
+// Sección "info_hotel"
+function obtener_info_hotel(){
+    const id = localStorage.getItem('id_hotel')
+
+    fetch(`http://localhost:3000/api/v1/hoteles/${id}`)
+    .then(response => response.json())
+    .then(hotel => {
+        const titulo = document.getElementById('titulo-hotel')
+        titulo.innerText = `Información del hotel: ${hotel.nombre}`
+
+        const foto = document.getElementById('foto-hotel')
+        foto.setAttribute('src', hotel.foto_hotel)
+        foto.setAttribute('alt', `Imagen del hotel ${hotel.nombre}`)
+
+        const datos = document.getElementById('datos-hotel')
+        datos.innerText = `Dirección: ${hotel.calle} ${hotel.num_calle}. Habitaciones: ${hotel.cant_habitaciones}.`
+
+        const boton_modificar = document.getElementById("boton-modificar")
+        localStorage.setItem('id_hotel', hotel.id)
+        boton_modificar.setAttribute("href", 'modificar_hotel.html')
+    })
+}
