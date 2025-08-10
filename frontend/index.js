@@ -1,4 +1,6 @@
 let reservaSeleccionada = null;
+const id_ciudad = localStorage.getItem('id_ciudad')
+let nombre_ciudad = ""
 
 // FUNCIONES DE LA NAVBAR:
 function abrir_sesion(){
@@ -601,4 +603,63 @@ function iniciar_sesion(){
 function eliminar_mensaje(){
     const mensaje_error = document.getElementById('mensaje_error')
     mensaje_error.style.display = "none"
+}
+
+// Sección "modificar_ciudad"
+function cargar_datos_ciudad(){
+
+    fetch('http://localhost:3000/api/v1/ciudades/' + parseInt(id_ciudad))
+    .then(response => response.json())
+    .then(ciudad => {
+        nombre_ciudad = ciudad.nombre
+        const titulo = document.getElementById('titulo-ciudad')
+        titulo.innerText = `Modificar datos de: ${ciudad.nombre}`
+
+        console.log(ciudad.foto_ciudad)
+        document.getElementById('foto-ciudad').value = ciudad.foto_ciudad
+        document.getElementById('provincia-ciudad').value = ciudad.provincia
+        document.getElementById('tamaño-ciudad').value = ciudad.tamaño
+        document.getElementById('año-fundación').value = ciudad.año_fundacion
+    })
+}
+
+function limpiar_campos(){
+    document.getElementById('foto-ciudad').value = '';
+    document.getElementById('provincia-ciudad').value = '';
+    document.getElementById('tamaño-ciudad').value = '';
+    document.getElementById('año-fundación').value = '';
+}
+
+function enviar_datos(){
+    event.preventDefault()
+    
+    const foto_ciudad = document.getElementById('foto-ciudad').value;
+    const provincia_ciudad = document.getElementById('provincia-ciudad').value;
+    const tamaño_ciudad = document.getElementById('tamaño-ciudad').value;
+    const año_fundación = document.getElementById('año-fundación').value;
+
+    let datos_creacion = {
+        id: parseInt(id_ciudad),
+        nombre: nombre_ciudad.trim(),
+        foto_ciudad: foto_ciudad.trim(),
+        provincia: provincia_ciudad.trim(),
+        tamaño: parseFloat(tamaño_ciudad),
+        año_fundacion: parseInt(año_fundación)
+    };
+
+    fetch('http://localhost:3000/api/v1/ciudades/' + parseInt(id_ciudad), {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(datos_creacion)
+    }).then(response => {
+        if (response.ok) {
+            alert(`Ciudad ${nombre_ciudad} modificada con éxito`)
+            limpiar_campos()
+        }
+        else {
+            alert('Error al modificar la ciudad')
+        }
+    });
 }
