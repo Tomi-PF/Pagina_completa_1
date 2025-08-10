@@ -1,6 +1,8 @@
 let reservaSeleccionada = null;
 const id_ciudad = localStorage.getItem('id_ciudad')
+const id_hotel = localStorage.getItem('id_hotel')
 let nombre_ciudad = ""
+let nombre_hotel = ""
 
 // FUNCIONES DE LA NAVBAR:
 function abrir_sesion(){
@@ -660,6 +662,84 @@ function enviar_datos(){
         }
         else {
             alert('Error al modificar la ciudad')
+        }
+    });
+}
+
+// Sección "modificar_hotel"
+function obtener_nombre_hotel(){
+
+    fetch('http://localhost:3000/api/v1/hoteles/' + id_hotel)
+    .then(response => response.json())
+    .then(hotel => {
+        nombre_hotel = hotel.nombre
+    })
+}
+
+function cargar_datos_hotel(){
+
+    fetch('http://localhost:3000/api/v1/hoteles/' + id_hotel)
+    .then(response => response.json())
+    .then(hotel => {
+        console.log(hotel)
+        document.getElementById('foto-hotel').value = hotel.foto_hotel
+        document.getElementById('cant-estrellas').value = hotel.cant_estrellas
+        document.getElementById('cant-habitaciones').value = hotel.cant_habitaciones
+        document.getElementById('precio-noche').value = hotel.precio_noche
+        document.getElementById('calle').value = hotel.calle
+        document.getElementById('num-calle').value = hotel.num_calle
+        document.getElementById('tel').value = hotel.telefono
+        
+    })
+}
+
+function limpiar_campos(){
+    document.getElementById('foto-hotel').value = ''
+    document.getElementById('cant-estrellas').value = ''
+    document.getElementById('cant-habitaciones').value = ''
+    document.getElementById('precio-noche').value = ''
+    document.getElementById('calle').value = ''
+    document.getElementById('num-calle').value = ''
+    document.getElementById('tel').value = ''
+}
+
+function enviar_datos(){
+    event.preventDefault()
+    
+    const foto_hotel = document.getElementById('foto-hotel').value;
+    const cant_estrellas = document.getElementById('cant-estrellas').value;
+    const cant_habitaciones = document.getElementById('cant-habitaciones').value;
+    const precio_noche = document.getElementById('precio-noche').value;
+    const calle = document.getElementById('calle').value;
+    const num_calle = document.getElementById('num-calle').value;
+    const telefono = document.getElementById('tel').value;
+
+    let datos_modificacion = {
+        id: parseInt(id_hotel),
+        nombre: nombre_hotel,
+        foto_hotel: foto_hotel.trim(),
+        id_ciudad: parseInt(id_ciudad),
+        cant_estrellas: parseInt(cant_estrellas),
+        cant_habitaciones: parseInt(cant_habitaciones),
+        precio_noche: parseInt(precio_noche),
+        calle: calle.trim(),
+        num_calle: parseInt(num_calle),
+        telefono: parseInt(telefono)
+    };
+
+    fetch('http://localhost:3000/api/v1/hoteles/' + parseInt(id_hotel), {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(datos_modificacion)
+    }).then(response => {
+        if (response.ok) {
+            alert(`Hotel ${nombre_hotel} modificado con éxito`)
+            limpiar_campos()
+        }
+        else {
+            alert('Error al modificar el hotel')
         }
     });
 }
