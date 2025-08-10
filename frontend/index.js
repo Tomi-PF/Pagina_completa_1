@@ -546,3 +546,59 @@ function obtener_info_hotel(){
         boton_modificar.setAttribute("href", 'modificar_hotel.html')
     })
 }
+
+// Sección "iniciar_sesion"
+function iniciar_sesion(){
+    const formularioUsuario = document.getElementById('formReserva')
+
+    formularioUsuario.addEventListener('submit', (event) =>{
+        event.preventDefault()
+
+        const usuario = document.getElementById('usuario').value.trim()
+        const contraseña = document.getElementById('password').value.trim()
+
+        const usuario_autenticar = {
+            usuario: usuario,
+            contraseña: contraseña
+        }
+
+        fetch('http://localhost:3000/api/v1/usuarios/autenticar/', {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(usuario_autenticar)
+        })
+        .then(response => {
+            if(!response.ok){
+                return response.json().then(errorData =>{
+                    const contenedor_mensaje = document.getElementById('mensaje_error')
+                    contenedor_mensaje.style.display = "flex"
+                    const contenedor_texto = document.getElementById('mensaje')
+                    contenedor_texto.innerText = errorData.error
+                    throw new Error(errorData.error || 'Error al autenticar el usuario')
+                })
+            }
+            return response.json()
+        })
+        .then(data => {
+            formularioUsuario.reset()
+
+            const contenedor_mensaje = document.getElementById('mensaje_error')
+            contenedor_mensaje.style.display = "none"
+            const boton_inicio_sesion = document.getElementById('in_ses')
+            boton_inicio_sesion.style.display = "none"
+            const boton_registrarse = document.getElementById('reg')
+            boton_registrarse.style.display = "none"
+            const boton_cerrar_sesion = document.getElementById('c_ses')
+            boton_cerrar_sesion.style.display = "flex"
+
+            localStorage.setItem('id_usuario', parseInt(data.id))
+        })
+    })
+}
+
+function eliminar_mensaje(){
+    const mensaje_error = document.getElementById('mensaje_error')
+    mensaje_error.style.display = "none"
+}
