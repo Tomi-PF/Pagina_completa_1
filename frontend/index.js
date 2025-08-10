@@ -632,7 +632,7 @@ function limpiar_campos(){
     document.getElementById('año-fundación').value = '';
 }
 
-function enviar_datos(){
+function enviar_datos_ciudad(){
     event.preventDefault()
     
     const foto_ciudad = document.getElementById('foto-ciudad').value;
@@ -703,7 +703,7 @@ function limpiar_campos(){
     document.getElementById('tel').value = ''
 }
 
-function enviar_datos(){
+function enviar_datos_hotel(){
     event.preventDefault()
     
     const foto_hotel = document.getElementById('foto-hotel').value;
