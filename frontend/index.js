@@ -583,6 +583,7 @@ function iniciar_sesion(){
             boton_cerrar_sesion.style.display = "flex"
 
             localStorage.setItem('id_usuario', parseInt(data.id))
+            window.location.href = 'http://localhost:8000/'
         })
     })
 }
@@ -640,6 +641,7 @@ function enviar_datos_ciudad(){
         }).then(response => {
             if (response.ok) {
                 alert(`Ciudad ${nombre_ciudad} modificada con éxito`)
+                window.location.href = 'http://localhost:8000/info_ciudad'
             }
             else {
                 alert('Error al modificar la ciudad')
@@ -712,6 +714,7 @@ function enviar_datos_hotel(){
         }).then(response => {
             if (response.ok) {
                 alert(`Hotel ${nombre_hotel} modificado con éxito`)
+                window.location.href = 'http://localhost:8000/info_hotel'
             }
             else {
                 alert('Error al modificar el hotel')
@@ -828,6 +831,7 @@ function crear_reserva(){
         .then( data => {
             console.log('Reserva creada:', data)
             alert('Reserva creada con éxito')
+            window.location.href = 'http://localhost:8000/gestionar_reservas'
             formReserva.reset()
         })
         .catch( error => {
