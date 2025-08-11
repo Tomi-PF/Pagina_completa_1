@@ -1,4 +1,4 @@
-let reservaSeleccionada = null;
+let reserva_seleccionada = null;
 const id_ciudad = localStorage.getItem('id_ciudad')
 const id_hotel = localStorage.getItem('id_hotel')
 let nombre_ciudad = ""
@@ -165,9 +165,9 @@ function enviar_datos(){
 
     if(ruta_actual === '/crear_ciudades'){
 
-        const formularioCiudad = document.getElementById('formCrearCiudad')
+        const formulario_ciudad = document.getElementById('formCrearCiudad')
 
-        formularioCiudad.addEventListener('submit', (event) => {
+        formulario_ciudad.addEventListener('submit', (event) => {
             event.preventDefault()
 
             const nombre_ciudad = document.getElementById('nombre_ciudad').value;
@@ -203,9 +203,9 @@ function enviar_datos(){
     }else if(ruta_actual === '/crear_hoteles'){
 
         const id = localStorage.getItem('id_ciudad')
-        const formularioHotel = document.getElementById('formCrearHotel')
+        const formulario_hotel = document.getElementById('formCrearHotel')
 
-        formularioHotel.addEventListener('submit', (event) => {
+        formulario_hotel.addEventListener('submit', (event) => {
             event.preventDefault()
 
             // Rellena el campo de ciudad con el ID de la ciudad seleccionada
@@ -253,13 +253,13 @@ function enviar_datos(){
 
 // Sección "editar_reserva"
 function cargar_datos_reserva(){
-    const reservaId = localStorage.getItem('id_reserva')
+    const id_reserva = localStorage.getItem('id_reserva')
     configurarCambioCiudad()
-    cargarDatosReserva(reservaId)
+    cargarDatosReserva(id_reserva)
 }
 
 function editar_datos_reserva(){
-    const reservaId = localStorage.getItem('id_reserva')
+    const id_reserva = localStorage.getItem('id_reserva')
     const formularioReserva = document.getElementById('formEditarReserva')
 
     formularioReserva.addEventListener('submit', (event) => {
@@ -277,7 +277,7 @@ function editar_datos_reserva(){
         }
 
         try {
-            fetch('http://localhost:3000/api/v1/reservas/' + reservaId, {
+            fetch('http://localhost:3000/api/v1/reservas/' + id_reserva, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(datosReserva)
@@ -352,9 +352,9 @@ function configurarCambioCiudad() {
     }
 }
 
-function cargarDatosReserva(reservaId) {
+function cargarDatosReserva(id_reserva) {
     try {
-        fetch('http://localhost:3000/api/v1/reservas/' + reservaId)
+        fetch('http://localhost:3000/api/v1/reservas/' + id_reserva)
         .then(response => {
             if(!response.ok){
                 throw new Error('No se pudo obtener la reserva')
@@ -411,23 +411,23 @@ function renderizarReservas(reservas) {
     contenedor.innerHTML = ''
 
     reservas.forEach(reserva => {
-        const reservaElement = document.createElement('div')
-        reservaElement.className = 'reserva-item'
+        const reserva_element = document.createElement('div')
+        reserva_element.className = 'reserva-item'
         
-        reservaElement.innerHTML = `
+        reserva_element.innerHTML = `
             <p><strong>ID:</strong> ${reserva.id}</p>
             <p><strong>Nombre:</strong> ${reserva.nombre_completo}</p>
             <p><strong>Ciudad:</strong> ${reserva.ciudad.nombre}</p>
             <p><strong>Hotel:</strong> ${reserva.hotel.nombre}</p>
         `;
         
-        reservaElement.addEventListener('click', () => abrirModal(reserva))
-        contenedor.appendChild(reservaElement)
+        reserva_element.addEventListener('click', () => abrirModal(reserva))
+        contenedor.appendChild(reserva_element)
     });
 }
 
 function abrirModal(reserva) {
-    reservaSeleccionada = reserva;
+    reserva_seleccionada = reserva;
     const modal = document.getElementById('modal-reserva')
 
     modal.style.display = 'flex'
@@ -459,7 +459,7 @@ function eliminar_reserva(){
 
     if (confirm('¿Estás seguro de eliminar esta reserva?')) {
         try {
-            fetch('http://localhost:3000/api/v1/reservas/' + reservaSeleccionada.id, {
+            fetch('http://localhost:3000/api/v1/reservas/' + reserva_seleccionada.id, {
                 method: 'DELETE'
             })
             .then(response => {
@@ -537,9 +537,9 @@ function obtener_info_hotel(){
 
 // Sección "iniciar_sesion"
 function iniciar_sesion(){
-    const formularioUsuario = document.getElementById('formInicioSesion')
+    const formulario_usuario = document.getElementById('formInicioSesion')
 
-    formularioUsuario.addEventListener('submit', (event) =>{
+    formulario_usuario.addEventListener('submit', (event) =>{
         event.preventDefault()
 
         const usuario = document.getElementById('usuario').value.trim()
@@ -570,7 +570,7 @@ function iniciar_sesion(){
             return response.json()
         })
         .then(data => {
-            formularioUsuario.reset()
+            formulario_usuario.reset()
 
             const contenedor_mensaje = document.getElementById('mensaje_error')
             contenedor_mensaje.style.display = "none"
@@ -611,9 +611,9 @@ function cargar_datos_ciudad(){
 
 function enviar_datos_ciudad(){
 
-    const formularioCiudad = document.getElementById('formModificarCiudad')
+    const formulario_ciudad = document.getElementById('formModificarCiudad')
     
-    formularioCiudad.addEventListener('submit', (event) => {
+    formulario_ciudad.addEventListener('submit', (event) => {
         event.preventDefault()
         
         const foto_ciudad = document.getElementById('foto-ciudad').value;
@@ -676,9 +676,9 @@ function cargar_datos_hotel(){
 
 function enviar_datos_hotel(){
 
-    const formularioHotel = document.getElementById('formModificarHotel')
+    const formulario_hotel = document.getElementById('formModificarHotel')
 
-    formularioHotel.addEventListener('submit', (event) => {
+    formulario_hotel.addEventListener('submit', (event) => {
         event.preventDefault()
         
         const foto_hotel = document.getElementById('foto-hotel').value;
@@ -723,10 +723,10 @@ function enviar_datos_hotel(){
 // Sección "registrarse"
 function registrarse(){
     // Selecciona el formulario
-    const formularioUsuario = document.getElementById('formRegistro')
+    const formulario_usuario = document.getElementById('formRegistro')
 
     // Al enviar el formulario
-    formularioUsuario.addEventListener('submit', (event) => {
+    formulario_usuario.addEventListener('submit', (event) => {
         event.preventDefault()
 
         // Obtención de los datos de nuevo usuario
@@ -768,7 +768,7 @@ function registrarse(){
             return response.json()
         })
         .then(() => {
-            formularioUsuario.reset()
+            formulario_usuario.reset()
             window.location.href = "http://localhost:8000/iniciar_sesion"
         })
     })
@@ -777,10 +777,10 @@ function registrarse(){
 // Sección "reservas"
 function crear_reserva(){
     // Selecciona el form
-    const formReserva = document.getElementById('formReserva')
+    const form_reserva = document.getElementById('formReserva')
 
     // Al apretar en submit
-    formReserva.addEventListener('submit', (event) => {
+    form_reserva.addEventListener('submit', (event) => {
         event.preventDefault()
 
         // Recopila los valores ingresados en cada campo
@@ -828,7 +828,7 @@ function crear_reserva(){
         .then( data => {
             alert('Reserva creada con éxito')
             window.location.href = 'http://localhost:8000/gestionar_reservas'
-            formReserva.reset()
+            form_reserva.reset()
         })
         .catch( error => {
             console.error('Error al crear la reserva:', error)
@@ -899,7 +899,6 @@ function crear_card_hotel() {
         }
 
         hoteles.forEach(hotel => {
-            
             // Creación Nombre
             const Nombre = document.createElement('p')
             Nombre.setAttribute("class", "city-name")
