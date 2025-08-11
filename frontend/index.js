@@ -76,7 +76,7 @@ function cerrar_sesion(){
 
 // FUNCIONES DE LAS SECCINES DE LA PÁGINA:
 // Sección "alojamientos"
-function crear_card_ciudad() {
+function crear_card_ciudad(){
     const container = document.getElementById('ciudadesContainer')
     const mensaje = document.getElementById('mensajeError')
 
@@ -84,7 +84,7 @@ function crear_card_ciudad() {
     .then(response => response.json())
     .then(ciudades => {
 
-        if (ciudades.length === 0) {
+        if(ciudades.length === 0){
             mensaje.innerText = "No hay ciudades disponibles."
             return
         }
@@ -143,7 +143,7 @@ function crear_card_ciudad() {
     })
 }
 
-function borrar_ciudad(id) {
+function borrar_ciudad(id){
 
     const container = document.getElementById('ciudadesContainer')
 
@@ -192,9 +192,9 @@ function enviar_datos(){
                 body: JSON.stringify(datos_creacion)
             })
             .then(response => {
-                if (response.status === 201) {
+                if(response.status === 201){
                     alert("Ciudad creada con éxito");
-                } else {
+                }else{
                     alert("No se pudo crear la ciudad");
                 }
             })
@@ -241,9 +241,9 @@ function enviar_datos(){
                 body: JSON.stringify(datos_creacion)
             })
             .then(response => {
-                if (response.status === 201) {
+                if(response.status === 201){
                     alert("Hotel creado con éxito");
-                } else {
+                }else{
                     alert("No se pudo crear el hotel");
                 }
             });
@@ -276,14 +276,14 @@ function editar_datos_reserva(){
             fecha_salida: document.getElementById('fecha-salida').value
         }
 
-        try {
+        try{
             fetch('http://localhost:3000/api/v1/reservas/' + id_reserva, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(datosReserva)
             })
             .then(response => {
-                if (!response.ok) {
+                if(!response.ok){
                     throw new Error(errorData.error || 'Error al actualizar la reserva')
                 }
                 return response.json()
@@ -292,24 +292,24 @@ function editar_datos_reserva(){
             alert('Reserva actualizada con éxito')
             window.location.href = 'gestionar_reservas.html'
             
-        } catch (error) {
+        }catch(error){
             console.error('Error al actualizar la reserva:', error)
             alert('Error al actualizar la reserva: ' + error.message)
         }
     })
 }
 
-function seleccionar_opcion(selectId, valueToSelect) {
+function seleccionar_opcion(selectId, valueToSelect){
     const selectElement = document.getElementById(selectId)
-    for (let i = 0; i < selectElement.options.length; i++) {
-        if (selectElement.options[i].value == valueToSelect) {
+    for(let i = 0; i < selectElement.options.length; i++){
+        if(selectElement.options[i].value == valueToSelect){
             selectElement.selectedIndex = i;
             break;
         }
     }
 }
 
-function cargar_ciudades(callback) {
+function cargar_ciudades(callback){
     const opciones_ciudad = document.getElementById('seleccionar-ciudad')
     // Limpia el select
     opciones_ciudad.innerHTML = '<option value="" disabled selected>Ciudad destino</option>'
@@ -328,7 +328,7 @@ function cargar_ciudades(callback) {
     .catch(error => console.error('Error al cargar ciudades:', error))
 }
 
-function configurar_cambio_ciudad() {
+function configurar_cambio_ciudad(){
     const opciones_ciudad = document.getElementById('seleccionar-ciudad');
     const opciones_hotel = document.getElementById('seleccionar-hotel');
     
@@ -352,8 +352,8 @@ function configurar_cambio_ciudad() {
     }
 }
 
-function cargar_reserva_datos(id_reserva) {
-    try {
+function cargar_reserva_datos(id_reserva){
+    try{
         fetch('http://localhost:3000/api/v1/reservas/' + id_reserva)
         .then(response => {
             if(!response.ok){
@@ -384,7 +384,7 @@ function cargar_reserva_datos(id_reserva) {
             })
         })
 
-    } catch (error) {
+    }catch(error){
         console.error('Error al cargar la reserva:', error)
         alert('Error al cargar la reserva. Redirigiendo a la lista de reservas.')
         window.location.href = 'gestionar_reservas.html' // Redirige a la página anterior
@@ -392,21 +392,21 @@ function cargar_reserva_datos(id_reserva) {
 }
 
 // Sección "gestionar_reservas"
-function cargar_reservas() {
-    try {
+function cargar_reservas(){
+    try{
         fetch('http://localhost:3000/api/v1/reservas')
         .then(response => response.json())
         .then(reservas => {
             renderizar_reservas(reservas)
         })
 
-    } catch (error) {
+    }catch(error){
         console.error('Error:', error)
         alert('Error al cargar reservas')
     }
 }
 
-function renderizar_reservas(reservas) {
+function renderizar_reservas(reservas){
     const contenedor = document.getElementById('lista-reservas')
     contenedor.innerHTML = ''
 
@@ -426,7 +426,7 @@ function renderizar_reservas(reservas) {
     });
 }
 
-function abrir_modal(reserva) {
+function abrir_modal(reserva){
     reserva_seleccionada = reserva;
     const modal = document.getElementById('modal-reserva')
 
@@ -457,8 +457,8 @@ function editar_reserva(){
 
 function eliminar_reserva(){
 
-    if (confirm('¿Estás seguro de eliminar esta reserva?')) {
-        try {
+    if(confirm('¿Estás seguro de eliminar esta reserva?')){
+        try{
             fetch('http://localhost:3000/api/v1/reservas/' + reserva_seleccionada.id, {
                 method: 'DELETE'
             })
@@ -471,7 +471,7 @@ function eliminar_reserva(){
                 }
             })
             
-        } catch (error) {
+        }catch(error){
             console.error('Error:', error)
             alert('Error al eliminar reserva')
         }
@@ -479,7 +479,7 @@ function eliminar_reserva(){
 }
 
 // Sección "info_ciudad"
-function crear_info_ciudad() {
+function crear_info_ciudad(){
 
     const id = localStorage.getItem('id_ciudad')
 
@@ -516,7 +516,7 @@ function ver_hoteles(){
 function obtener_info_hotel(){
     const id = localStorage.getItem('id_hotel')
 
-    fetch(`http://localhost:3000/api/v1/hoteles/${id}`)
+    fetch('http://localhost:3000/api/v1/hoteles/' + id)
     .then(response => response.json())
     .then(hotel => {
         const titulo = document.getElementById('titulo-hotel')
@@ -539,7 +539,7 @@ function obtener_info_hotel(){
 function iniciar_sesion(){
     const formulario_usuario = document.getElementById('formInicioSesion')
 
-    formulario_usuario.addEventListener('submit', (event) =>{
+    formulario_usuario.addEventListener('submit', (event) => {
         event.preventDefault()
 
         const usuario = document.getElementById('usuario').value.trim()
@@ -559,7 +559,7 @@ function iniciar_sesion(){
         })
         .then(response => {
             if(!response.ok){
-                return response.json().then(errorData =>{
+                return response.json().then(errorData => {
                     const contenedor_mensaje = document.getElementById('mensaje_error')
                     contenedor_mensaje.style.display = "flex"
                     const contenedor_texto = document.getElementById('mensaje')
@@ -637,11 +637,10 @@ function enviar_datos_ciudad(){
             },
             body: JSON.stringify(datos_creacion)
         }).then(response => {
-            if (response.ok) {
+            if(response.ok){
                 alert(`Ciudad ${nombre_ciudad} modificada con éxito`)
                 window.location.href = 'http://localhost:8000/info_ciudad'
-            }
-            else {
+            }else{
                 alert('Error al modificar la ciudad')
             }
         });
@@ -709,11 +708,10 @@ function enviar_datos_hotel(){
             },
             body: JSON.stringify(datos_modificacion)
         }).then(response => {
-            if (response.ok) {
+            if(response.ok){
                 alert(`Hotel ${nombre_hotel} modificado con éxito`)
                 window.location.href = 'http://localhost:8000/info_hotel'
-            }
-            else {
+            }else{
                 alert('Error al modificar el hotel')
             }
         });
@@ -818,14 +816,14 @@ function crear_reserva(){
             body: JSON.stringify(datosReserva)
         })
         .then(response => {
-            if (!response.ok) {
+            if(!response.ok){
                 return response.json().then(errorData => {
                     throw new Error(errorData.error || 'Error al crear la reserva')
                 })
             }
             return response.json()
         })
-        .then( data => {
+        .then(() => {
             alert('Reserva creada con éxito')
             window.location.href = 'http://localhost:8000/gestionar_reservas'
             form_reserva.reset()
@@ -846,7 +844,7 @@ function opciones_reserva(opcion) {
     .then(response => response.json())
     .then(ciudades => {
 
-        if (opcion == "Crear opciones ciudades"){
+        if(opcion == "Crear opciones ciudades"){
             
             ciudades.forEach(ciudad => {
         
@@ -857,7 +855,7 @@ function opciones_reserva(opcion) {
 
             })
 
-        } else if(opcion == "Crear opciones hoteles") {
+        }else if(opcion == "Crear opciones hoteles"){
 
             opciones_ciudad.addEventListener('change', () => {
 
@@ -885,15 +883,15 @@ function opciones_reserva(opcion) {
 }
 
 // Sección "ver_hoteles"
-function crear_card_hotel() {
+function crear_card_hotel(){
     const container = document.getElementById('hotelesContainer')
     const mensaje = document.getElementById('mensajeError')
 
-    fetch('http://localhost:3000/api/v1/hoteles/' + id_ciudad + '/hoteles' )
+    fetch('http://localhost:3000/api/v1/hoteles/' + id_ciudad + '/hoteles')
     .then(response => response.json())
     .then(hoteles => {
             
-        if (hoteles.length === 0) {
+        if(hoteles.length === 0){
             mensaje.innerText = "No hay hoteles disponibles."
             return
         }
@@ -951,7 +949,7 @@ function crear_card_hotel() {
     })
 }
 
-function borrar_hotel(id) {
+function borrar_hotel(id){
 
     const container = document.getElementById('hotelesContainer')
 
