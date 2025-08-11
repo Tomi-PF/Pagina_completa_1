@@ -254,8 +254,8 @@ function enviar_datos(){
 // Sección "editar_reserva"
 function cargar_datos_reserva(){
     const id_reserva = localStorage.getItem('id_reserva')
-    configurarCambioCiudad()
-    cargarDatosReserva(id_reserva)
+    configurar_cambio_ciudad()
+    cargar_reserva_datos(id_reserva)
 }
 
 function editar_datos_reserva(){
@@ -299,7 +299,7 @@ function editar_datos_reserva(){
     })
 }
 
-function seleccionarOpcion(selectId, valueToSelect) {
+function seleccionar_opcion(selectId, valueToSelect) {
     const selectElement = document.getElementById(selectId)
     for (let i = 0; i < selectElement.options.length; i++) {
         if (selectElement.options[i].value == valueToSelect) {
@@ -309,7 +309,7 @@ function seleccionarOpcion(selectId, valueToSelect) {
     }
 }
 
-function cargarCiudades(callback) {
+function cargar_ciudades(callback) {
     const opciones_ciudad = document.getElementById('seleccionar-ciudad')
     // Limpia el select
     opciones_ciudad.innerHTML = '<option value="" disabled selected>Ciudad destino</option>'
@@ -328,7 +328,7 @@ function cargarCiudades(callback) {
     .catch(error => console.error('Error al cargar ciudades:', error))
 }
 
-function configurarCambioCiudad() {
+function configurar_cambio_ciudad() {
     const opciones_ciudad = document.getElementById('seleccionar-ciudad');
     const opciones_hotel = document.getElementById('seleccionar-hotel');
     
@@ -352,7 +352,7 @@ function configurarCambioCiudad() {
     }
 }
 
-function cargarDatosReserva(id_reserva) {
+function cargar_reserva_datos(id_reserva) {
     try {
         fetch('http://localhost:3000/api/v1/reservas/' + id_reserva)
         .then(response => {
@@ -371,15 +371,15 @@ function cargarDatosReserva(id_reserva) {
             document.getElementById('fecha-salida').value = reserva.fecha_salida
 
             // Carga opciones de ciudades y selecciona la ciudad correcta
-            cargarCiudades(() => {
-                seleccionarOpcion('seleccionar-ciudad', reserva.id_ciudad)
+            cargar_ciudades(() => {
+                seleccionar_opcion('seleccionar-ciudad', reserva.id_ciudad)
                 
                 const ciudadSelect = document.getElementById('seleccionar-ciudad')
                 ciudadSelect.dispatchEvent(new Event('change'))
 
                 // Espera un poco hasta que se carguen los hoteles
                 setTimeout(() => {
-                    seleccionarOpcion('seleccionar-hotel', reserva.id_hotel)
+                    seleccionar_opcion('seleccionar-hotel', reserva.id_hotel)
                 }, 500)
             })
         })
@@ -392,12 +392,12 @@ function cargarDatosReserva(id_reserva) {
 }
 
 // Sección "gestionar_reservas"
-function cargarReservas() {
+function cargar_reservas() {
     try {
         fetch('http://localhost:3000/api/v1/reservas')
         .then(response => response.json())
         .then(reservas => {
-            renderizarReservas(reservas)
+            renderizar_reservas(reservas)
         })
 
     } catch (error) {
@@ -406,7 +406,7 @@ function cargarReservas() {
     }
 }
 
-function renderizarReservas(reservas) {
+function renderizar_reservas(reservas) {
     const contenedor = document.getElementById('lista-reservas')
     contenedor.innerHTML = ''
 
@@ -421,12 +421,12 @@ function renderizarReservas(reservas) {
             <p><strong>Hotel:</strong> ${reserva.hotel.nombre}</p>
         `;
         
-        reserva_element.addEventListener('click', () => abrirModal(reserva))
+        reserva_element.addEventListener('click', () => abrir_modal(reserva))
         contenedor.appendChild(reserva_element)
     });
 }
 
-function abrirModal(reserva) {
+function abrir_modal(reserva) {
     reserva_seleccionada = reserva;
     const modal = document.getElementById('modal-reserva')
 
@@ -467,7 +467,7 @@ function eliminar_reserva(){
                 if(response.ok){
                     alert('Reserva eliminada')
                     document.getElementById('modal-reserva').style.display = 'none'
-                    cargarReservas()
+                    cargar_reservas()
                 }
             })
             
