@@ -907,3 +907,87 @@ function opciones_reserva(opcion) {
         }
     })
 }
+
+// Sección "ver_hoteles"
+function crear_card_hotel() {
+    const container = document.getElementById('hotelesContainer')
+    const mensaje = document.getElementById('mensajeError')
+
+    fetch('http://localhost:3000/api/v1/hoteles/' + id_ciudad + '/hoteles' )
+    .then(response => response.json())
+    .then(hoteles => {
+            
+        console.log(hoteles)
+        if (hoteles.length === 0) {
+            mensaje.innerText = "No hay hoteles disponibles."
+            return
+        }
+
+        hoteles.forEach(hotel => {
+            
+            // Creación Nombre
+            const Nombre = document.createElement('p')
+            Nombre.setAttribute("class", "city-name")
+            Nombre.innerText = hotel.nombre
+            // Info del hotel
+            const Boton_info = document.createElement('a')
+            Boton_info.setAttribute("class", "button is-primary is-outlined")
+            Boton_info.innerText = "Ver info"
+            Boton_info.style.marginBottom = "10px"
+            Boton_info.addEventListener('click', () => {
+                localStorage.setItem('id_hotel', parseInt(hotel.id))
+                Boton_info.href = 'info_hotel.html'
+            })
+            const Boton_borrar = document.createElement('a')
+            if(localStorage.getItem('id_usuario')){
+                // Creación del Botón para borrar el hotel
+                Boton_borrar.setAttribute("class", "button is-danger is-outlined")
+                Boton_borrar.innerText = "Borrar hotel"
+                Boton_borrar.addEventListener('click', () => {
+                    borrar_hotel(hotel.id)
+                })
+            }
+            // Creación del Contenedor
+            const Contenedor = document.createElement('div')
+            Contenedor.setAttribute("class", "overlay")
+            // Creación de la Imagen
+            const Imagen = document.createElement('img')
+            Imagen.setAttribute("src", hotel.foto_hotel)
+            Imagen.setAttribute("class", "alojamiento-img")
+            // Creación de la Estructura
+            const Estructura = document.createElement('figure')
+            Estructura.setAttribute("class", "image")
+            // Creación de la Card
+            const Card = document.createElement('div')
+            Card.setAttribute("class", "card alojamiento-card")
+            // Creación de las columnas
+            const Columnas = document.createElement('div')
+            Columnas.setAttribute("class", "column is-4")
+            
+
+            Contenedor.appendChild(Nombre)
+            Contenedor.appendChild(Boton_info)
+            Contenedor.appendChild(Boton_borrar)
+            Estructura.appendChild(Imagen)
+            Estructura.appendChild(Contenedor)
+            Card.appendChild(Estructura)
+            Columnas.appendChild(Card)
+            container.appendChild(Columnas)
+        });
+    })
+}
+
+function borrar_hotel(id) {
+
+    const container = document.getElementById('hotelesContainer')
+
+    fetch('http://localhost:3000/api/v1/hoteles/' + id, {
+        method: 'DELETE'
+    })
+    .then(response => response.json())
+    .then(hotel => {
+        alert(`El hotel ${hotel.nombre} ha sido borrado`)
+        container.innerText = ''
+        crear_card_hotel()
+    })
+}
