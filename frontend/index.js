@@ -158,33 +158,7 @@ function borrar_ciudad(id) {
     })
 }
 
-// Sección "crear_ciudades" y "crear_hoteles"
-function limpiar_campos(){
-    
-    const ruta_actual = window.location.pathname;
-
-    if(ruta_actual === '/crear_ciudades'){
-
-        document.getElementById('nombre_ciudad').value = '';
-        document.getElementById('foto_ciudad').value = '';
-        document.getElementById('provincia_ciudad').value = '';
-        document.getElementById('tamaño_ciudad').value = '';
-        document.getElementById('año_fundación').value = '';
-
-    }else if(ruta_actual === '/crear_hoteles'){
-        
-        document.getElementById('nombre_hotel').value = '';
-        document.getElementById('foto_hotel').value = '';
-        document.getElementById('cant_estrellas').value = '';
-        document.getElementById('cant_habitaciones').value = '';
-        document.getElementById('precio_noche').value = '';
-        document.getElementById('calle').value = '';
-        document.getElementById('num_calle').value = '';
-        document.getElementById('telefono').value = '';
-
-    }
-}
-        
+// Sección "crear_ciudades" y "crear_hoteles"        
 function enviar_datos(){
 
     const ruta_actual = window.location.pathname;
@@ -220,7 +194,6 @@ function enviar_datos(){
             .then(response => {
                 if (response.status === 201) {
                     alert("Ciudad creada con éxito");
-                    limpiar_campos()
                 } else {
                     alert("No se pudo crear la ciudad");
                 }
@@ -271,7 +244,6 @@ function enviar_datos(){
             .then(response => {
                 if (response.status === 201) {
                     alert("Hotel creado con éxito");
-                    limpiar_campos();
                 } else {
                     alert("No se pudo crear el hotel");
                 }
@@ -638,13 +610,6 @@ function cargar_datos_ciudad(){
     })
 }
 
-function limpiar_campos(){
-    document.getElementById('foto-ciudad').value = '';
-    document.getElementById('provincia-ciudad').value = '';
-    document.getElementById('tamaño-ciudad').value = '';
-    document.getElementById('año-fundación').value = '';
-}
-
 function enviar_datos_ciudad(){
 
     const formularioCiudad = document.getElementById('formModificarCiudad')
@@ -675,7 +640,6 @@ function enviar_datos_ciudad(){
         }).then(response => {
             if (response.ok) {
                 alert(`Ciudad ${nombre_ciudad} modificada con éxito`)
-                limpiar_campos()
             }
             else {
                 alert('Error al modificar la ciudad')
@@ -709,16 +673,6 @@ function cargar_datos_hotel(){
         document.getElementById('tel').value = hotel.telefono
         
     })
-}
-
-function limpiar_campos(){
-    document.getElementById('foto-hotel').value = ''
-    document.getElementById('cant-estrellas').value = ''
-    document.getElementById('cant-habitaciones').value = ''
-    document.getElementById('precio-noche').value = ''
-    document.getElementById('calle').value = ''
-    document.getElementById('num-calle').value = ''
-    document.getElementById('tel').value = ''
 }
 
 function enviar_datos_hotel(){
@@ -758,7 +712,6 @@ function enviar_datos_hotel(){
         }).then(response => {
             if (response.ok) {
                 alert(`Hotel ${nombre_hotel} modificado con éxito`)
-                limpiar_campos()
             }
             else {
                 alert('Error al modificar el hotel')
