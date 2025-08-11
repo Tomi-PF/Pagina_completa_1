@@ -553,7 +553,7 @@ function obtener_info_hotel(){
 
 // Sección "iniciar_sesion"
 function iniciar_sesion(){
-    const formularioUsuario = document.getElementById('formReserva')
+    const formularioUsuario = document.getElementById('formInicioSesion')
 
     formularioUsuario.addEventListener('submit', (event) =>{
         event.preventDefault()
@@ -747,7 +747,7 @@ function enviar_datos_hotel(){
 // Sección "registrarse"
 function registrarse(){
     // Selecciona el formulario
-    const formularioUsuario = document.getElementById('formReserva')
+    const formularioUsuario = document.getElementById('formRegistro')
 
     // Al enviar el formulario
     formularioUsuario.addEventListener('submit', () => {
