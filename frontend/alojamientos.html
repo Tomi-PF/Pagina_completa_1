@@ -6,6 +6,8 @@
     <title>Alojamientos - Aterrizar</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.2/css/bulma.min.css">
     <link rel="stylesheet" href="styles.css">
+    <link rel="shortcut icon" href="img/Logo.png" type="image/x-icon">
+    <script src="index.js"></script>
 </head>
 <body>
 
@@ -56,127 +58,9 @@
     </footer>
 
     <script>
-
-        document.addEventListener('DOMContentLoaded', () => {
-
-            if(localStorage.getItem('id_usuario')){
-
-                const boton_inicio_sesion = document.getElementById('in_ses')
-                boton_inicio_sesion.style.display = "none"
-                const boton_registrarse = document.getElementById('reg')
-                boton_registrarse.style.display = "none"
-                const boton_cerrar_sesion = document.getElementById('c_ses')
-                boton_cerrar_sesion.style.display = "flex"
-                const boton_crear_ciudades = document.getElementById('crear_ciudades')
-                boton_crear_ciudades.style.display = "block"
-
-            }
-        })
-
-        function crear_card_ciudad() {
-            const container = document.getElementById('ciudadesContainer')
-            const mensaje = document.getElementById('mensajeError')
-
-            fetch('http://localhost:3000/api/v1/ciudades/')
-            .then(response => response.json())
-            .then(ciudades => {
-
-                if (ciudades.length === 0) {
-                    mensaje.innerText = "No hay ciudades disponibles."
-                    return
-                }
-
-                ciudades.forEach(ciudad => {
-                    
-                    // Creación Nombre
-                    const Nombre = document.createElement('p')
-                    Nombre.setAttribute("class", "city-name")
-                    Nombre.innerText = ciudad.nombre
-                    // Creación del Botón para ver mas información
-                    const Boton_info = document.createElement('a')
-                    Boton_info.setAttribute("class", "button is-primary is-outlined")
-                    Boton_info.innerText = "Ver info"
-                    Boton_info.style.marginBottom = "10px"
-                    Boton_info.addEventListener('click', () => {
-                        Boton_info.href = `info_ciudad.html?id=${ciudad.id}`
-                    })
-                    // Creación del Botón para borrar la ciudad
-                    if(localStorage.getItem('id_usuario')){
-                        const Boton_borrar = document.createElement('a')
-                        Boton_borrar.setAttribute("class", "button is-danger is-outlined")
-                        Boton_borrar.innerText = "Borrar ciudad"
-                        Boton_borrar.addEventListener('click', () => {
-                            borrar_ciudad(ciudad.id)
-                        })
-                    }
-                    // Creación del Contenedor
-                    const Contenedor = document.createElement('div')
-                    Contenedor.setAttribute("class", "overlay")
-                    // Creación de la Imagen
-                    const Imagen = document.createElement('img')
-                    Imagen.setAttribute("src", ciudad.foto_ciudad)
-                    Imagen.setAttribute("class", "alojamiento-img")
-                    // Creación de la Estructura
-                    const Estructura = document.createElement('figure')
-                    Estructura.setAttribute("class", "image")
-                    // Creación de la Card
-                    const Card = document.createElement('div')
-                    Card.setAttribute("class", "card alojamiento-card")
-                    // Creación de las columnas
-                    const Columnas = document.createElement('div')
-                    Columnas.setAttribute("class", "column is-4")
-                    
-
-                    Contenedor.appendChild(Nombre)
-                    Contenedor.appendChild(Boton_info)
-                    Contenedor.appendChild(Boton_borrar)
-                    Estructura.appendChild(Imagen)
-                    Estructura.appendChild(Contenedor)
-                    Card.appendChild(Estructura)
-                    Columnas.appendChild(Card)
-                    container.appendChild(Columnas)
-                });
-            })
-        }
-
-        function borrar_ciudad(id) {
-
-            const container = document.getElementById('ciudadesContainer')
-
-            fetch('http://localhost:3000/api/v1/ciudades/' + id, {
-                method: 'DELETE'
-            })
-            .then(response => response.json())
-            .then(ciudad => {
-                alert(`La ciudad ${ciudad.nombre} ha sido borrada`)
-                container.innerText = ''
-                crear_card_ciudad()
-            })
-        }
-
-        function cerrar_sesion(){
-
-            const id_usuario = localStorage.getItem('id_usuario')
-            fetch('http://localhost:3000/api/v1/usuarios/desautenticar/' + id_usuario, {
-                method: 'PUT'
-            })
-
-            const boton_inicio_sesion = document.getElementById('in_ses')
-            boton_inicio_sesion.style.display = "flex"
-            const boton_registrarse = document.getElementById('reg')
-            boton_registrarse.style.display = "flex"
-            const boton_cerrar_sesion = document.getElementById('c_ses')
-            boton_cerrar_sesion.style.display = "none"
-            const boton_crear_ciudades = document.getElementById('crear_ciudades')
-            boton_crear_ciudades.style.display = "none"
-
-            localStorage.removeItem('id_usuario')
-        }
-        
-        crear_card_ciudad()
+        document.addEventListener('load', abrir_sesion())
+        document.addEventListener('load', crear_card_ciudad())
     </script>
 
 </body>
 </html>
-
-
