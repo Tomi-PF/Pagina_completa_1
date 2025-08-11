@@ -45,7 +45,7 @@
             
             <div class="contenedor-form">
                 <header>Formulario para crear ciudades</header>
-                <form class="form">
+                <form class="form" id="formCrearCiudad">
                     
                     <div class="input-box">
                         <label>Nombre ciudad</label>
@@ -69,7 +69,7 @@
                     </div>
                     
                     <div class="column">
-                        <button onclick="enviar_datos()">Enviar</button>
+                        <button type="submit">Enviar</button>
                         <button onclick="limpiar_campos()">Limpiar</button>
                     </div>
                     
@@ -84,6 +84,7 @@
 
     <script>
         document.addEventListener('load', abrir_sesion())
+        document.addEventListener('load', enviar_datos())
     </script>
 </body>
 </html>

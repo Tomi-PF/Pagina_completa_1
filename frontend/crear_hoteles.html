@@ -44,7 +44,7 @@
         <section class="section-form">
             <div class="contenedor-form">
                 <header>Formulario para crear un hotel</header>
-                <form class="form">
+                <form class="form" id="formCrearHotel">
                     <div class="input-box">
                         <label>Nombre del hotel</label>
                         <input id="nombre_hotel" type="text" placeholder="Ingrese el nombre del hotel" required>
@@ -82,7 +82,7 @@
                         <input id="id_ciudad" type="text" placeholder="Ciudad" readonly>
                     </div>
                     <div class="column">
-                        <button onclick="enviar_datos()">Crear Hotel</button>
+                        <button type="submit">Crear Hotel</button>
                         <button type="button" onclick="limpiar_campos()">Limpiar</button>
                     </div>
                 </form>
@@ -97,6 +97,7 @@
 
     <script>
         document.addEventListener('load', abrir_sesion())
+        document.addEventListener('load', enviar_datos())
     </script>
 </body>
 </html>

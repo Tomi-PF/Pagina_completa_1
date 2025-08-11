@@ -187,87 +187,96 @@ function limpiar_campos(){
         
 function enviar_datos(){
 
-    event.preventDefault()
     const ruta_actual = window.location.pathname;
 
     if(ruta_actual === '/crear_ciudades'){
-        
-        const nombre_ciudad = document.getElementById('nombre_ciudad').value;
-        const foto_ciudad = document.getElementById('foto_ciudad').value;
-        const provincia_ciudad = document.getElementById('provincia_ciudad').value;
-        const tamaño_ciudad = document.getElementById('tamaño_ciudad').value;
-        const año_fundación = document.getElementById('año_fundación').value;
 
-        let datos_creacion = {
-            nombre: nombre_ciudad,
-            foto_ciudad: foto_ciudad,
-            provincia: provincia_ciudad,
-            tamaño: parseFloat(tamaño_ciudad),
-            año_fundacion: parseInt(año_fundación)
-        };
+        const formularioCiudad = document.getElementById('formCrearCiudad')
 
-        fetch('http://localhost:3000/api/v1/ciudades/', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(datos_creacion)
-        })
-        .then(response => {
-            if (response.status === 201) {
-                alert("Ciudad creada con éxito");
-                limpiar_campos()
-            } else {
-                alert("No se pudo crear la ciudad");
-            }
+        formularioCiudad.addEventListener('submit', (event) => {
+            event.preventDefault()
+
+            const nombre_ciudad = document.getElementById('nombre_ciudad').value;
+            const foto_ciudad = document.getElementById('foto_ciudad').value;
+            const provincia_ciudad = document.getElementById('provincia_ciudad').value;
+            const tamaño_ciudad = document.getElementById('tamaño_ciudad').value;
+            const año_fundación = document.getElementById('año_fundación').value;
+
+            let datos_creacion = {
+                nombre: nombre_ciudad,
+                foto_ciudad: foto_ciudad,
+                provincia: provincia_ciudad,
+                tamaño: parseFloat(tamaño_ciudad),
+                año_fundacion: parseInt(año_fundación)
+            };
+
+            fetch('http://localhost:3000/api/v1/ciudades/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(datos_creacion)
+            })
+            .then(response => {
+                if (response.status === 201) {
+                    alert("Ciudad creada con éxito");
+                    limpiar_campos()
+                } else {
+                    alert("No se pudo crear la ciudad");
+                }
+            })
         })
 
     }else if(ruta_actual === '/crear_hoteles'){
 
         const id = localStorage.getItem('id_ciudad')
+        const formularioHotel = document.getElementById('formCrearHotel')
 
-        // Rellena el campo de ciudad con el ID de la ciudad seleccionada
-        document.getElementById('id_ciudad').value = id;
+        formularioHotel.addEventListener('submit', (event) => {
+            event.preventDefault()
 
-        const nombre_hotel = document.getElementById('nombre_hotel').value;
-        const foto_hotel = document.getElementById('foto_hotel').value;
-        const cant_estrellas = document.getElementById('cant_estrellas').value;
-        const cant_habitaciones = document.getElementById('cant_habitaciones').value;
-        const precio_noche = document.getElementById('precio_noche').value;
-        const calle = document.getElementById('calle').value;
-        const num_calle = document.getElementById('num_calle').value;
-        const telefono = document.getElementById('telefono').value;
-        const id_ciudad = document.getElementById('id_ciudad').value;
+            // Rellena el campo de ciudad con el ID de la ciudad seleccionada
+            document.getElementById('id_ciudad').value = id;
 
-        let datos_creacion = { 
-            nombre: nombre_hotel,
-            foto_hotel: foto_hotel,
-            id_ciudad: parseInt(id_ciudad),
-            cant_estrellas: parseInt(cant_estrellas),
-            cant_habitaciones: parseInt(cant_habitaciones),
-            precio_noche: parseInt(precio_noche),
-            calle: calle,
-            num_calle: parseInt(num_calle),
-            telefono: parseInt(telefono)
-        };
-        console.log(datos_creacion)
+            const nombre_hotel = document.getElementById('nombre_hotel').value;
+            const foto_hotel = document.getElementById('foto_hotel').value;
+            const cant_estrellas = document.getElementById('cant_estrellas').value;
+            const cant_habitaciones = document.getElementById('cant_habitaciones').value;
+            const precio_noche = document.getElementById('precio_noche').value;
+            const calle = document.getElementById('calle').value;
+            const num_calle = document.getElementById('num_calle').value;
+            const telefono = document.getElementById('telefono').value;
+            const id_ciudad = document.getElementById('id_ciudad').value;
 
-        fetch('http://localhost:3000/api/v1/hoteles/', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(datos_creacion)
+            let datos_creacion = { 
+                nombre: nombre_hotel,
+                foto_hotel: foto_hotel,
+                id_ciudad: parseInt(id_ciudad),
+                cant_estrellas: parseInt(cant_estrellas),
+                cant_habitaciones: parseInt(cant_habitaciones),
+                precio_noche: parseInt(precio_noche),
+                calle: calle,
+                num_calle: parseInt(num_calle),
+                telefono: parseInt(telefono)
+            };
+            console.log(datos_creacion)
+
+            fetch('http://localhost:3000/api/v1/hoteles/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(datos_creacion)
+            })
+            .then(response => {
+                if (response.status === 201) {
+                    alert("Hotel creado con éxito");
+                    limpiar_campos();
+                } else {
+                    alert("No se pudo crear el hotel");
+                }
+            });
         })
-        .then(response => {
-            if (response.status === 201) {
-                alert("Hotel creado con éxito");
-                limpiar_campos();
-            } else {
-                alert("No se pudo crear el hotel");
-            }
-        });
-
     }
 }
 
@@ -280,39 +289,43 @@ function cargar_datos_reserva(){
 
 function editar_datos_reserva(){
     const reservaId = localStorage.getItem('id_reserva')
-    event.preventDefault()
-    const datosReserva = {
-        nombre_completo: document.getElementById('nombre').value.trim(),
-        email: document.getElementById('email').value.trim(),
-        numero_contacto: parseInt(document.getElementById('numContacto').value.trim(), 10),
-        id_ciudad: parseInt(document.getElementById('seleccionar-ciudad').value, 10),
-        id_hotel: parseInt(document.getElementById('seleccionar-hotel').value, 10),
-        cant_personas: parseInt(document.getElementById('numero').value, 10),
-        cant_habitaciones: parseInt(document.getElementById('numero2').value, 10),
-        fecha_ingreso: document.getElementById('fecha-entrada').value,
-        fecha_salida: document.getElementById('fecha-salida').value
-    }
+    const formularioReserva = document.getElementById('formEditarReserva')
 
-    try {
-        fetch('http://localhost:3000/api/v1/reservas/' + reservaId, {
-            method: 'PUT',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(datosReserva)
-        })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error(errorData.error || 'Error al actualizar la reserva')
-            }
-            return response.json()
-        })
+    formularioReserva.addEventListener('submit', (event) => {
+        event.preventDefault()
+        const datosReserva = {
+            nombre_completo: document.getElementById('nombre').value.trim(),
+            email: document.getElementById('email').value.trim(),
+            numero_contacto: parseInt(document.getElementById('numContacto').value.trim(), 10),
+            id_ciudad: parseInt(document.getElementById('seleccionar-ciudad').value, 10),
+            id_hotel: parseInt(document.getElementById('seleccionar-hotel').value, 10),
+            cant_personas: parseInt(document.getElementById('numero').value, 10),
+            cant_habitaciones: parseInt(document.getElementById('numero2').value, 10),
+            fecha_ingreso: document.getElementById('fecha-entrada').value,
+            fecha_salida: document.getElementById('fecha-salida').value
+        }
 
-        alert('Reserva actualizada con éxito')
-        window.location.href = 'gestionar_reservas.html'
-        
-    } catch (error) {
-        console.error('Error al actualizar la reserva:', error)
-        alert('Error al actualizar la reserva: ' + error.message)
-    }
+        try {
+            fetch('http://localhost:3000/api/v1/reservas/' + reservaId, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(datosReserva)
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(errorData.error || 'Error al actualizar la reserva')
+                }
+                return response.json()
+            })
+
+            alert('Reserva actualizada con éxito')
+            window.location.href = 'gestionar_reservas.html'
+            
+        } catch (error) {
+            console.error('Error al actualizar la reserva:', error)
+            alert('Error al actualizar la reserva: ' + error.message)
+        }
+    })
 }
 
 function seleccionarOpcion(selectId, valueToSelect) {
@@ -633,37 +646,42 @@ function limpiar_campos(){
 }
 
 function enviar_datos_ciudad(){
-    event.preventDefault()
+
+    const formularioCiudad = document.getElementById('formModificarCiudad')
     
-    const foto_ciudad = document.getElementById('foto-ciudad').value;
-    const provincia_ciudad = document.getElementById('provincia-ciudad').value;
-    const tamaño_ciudad = document.getElementById('tamaño-ciudad').value;
-    const año_fundación = document.getElementById('año-fundación').value;
+    formularioCiudad.addEventListener('submit', (event) => {
+        event.preventDefault()
+        
+        const foto_ciudad = document.getElementById('foto-ciudad').value;
+        const provincia_ciudad = document.getElementById('provincia-ciudad').value;
+        const tamaño_ciudad = document.getElementById('tamaño-ciudad').value;
+        const año_fundación = document.getElementById('año-fundación').value;
 
-    let datos_creacion = {
-        id: parseInt(id_ciudad),
-        nombre: nombre_ciudad.trim(),
-        foto_ciudad: foto_ciudad.trim(),
-        provincia: provincia_ciudad.trim(),
-        tamaño: parseFloat(tamaño_ciudad),
-        año_fundacion: parseInt(año_fundación)
-    };
+        let datos_creacion = {
+            id: parseInt(id_ciudad),
+            nombre: nombre_ciudad.trim(),
+            foto_ciudad: foto_ciudad.trim(),
+            provincia: provincia_ciudad.trim(),
+            tamaño: parseFloat(tamaño_ciudad),
+            año_fundacion: parseInt(año_fundación)
+        };
 
-    fetch('http://localhost:3000/api/v1/ciudades/' + parseInt(id_ciudad), {
-        method: 'PUT',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(datos_creacion)
-    }).then(response => {
-        if (response.ok) {
-            alert(`Ciudad ${nombre_ciudad} modificada con éxito`)
-            limpiar_campos()
-        }
-        else {
-            alert('Error al modificar la ciudad')
-        }
-    });
+        fetch('http://localhost:3000/api/v1/ciudades/' + parseInt(id_ciudad), {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(datos_creacion)
+        }).then(response => {
+            if (response.ok) {
+                alert(`Ciudad ${nombre_ciudad} modificada con éxito`)
+                limpiar_campos()
+            }
+            else {
+                alert('Error al modificar la ciudad')
+            }
+        });
+    })
 }
 
 // Sección "modificar_hotel"
@@ -704,44 +722,49 @@ function limpiar_campos(){
 }
 
 function enviar_datos_hotel(){
-    event.preventDefault()
-    
-    const foto_hotel = document.getElementById('foto-hotel').value;
-    const cant_estrellas = document.getElementById('cant-estrellas').value;
-    const cant_habitaciones = document.getElementById('cant-habitaciones').value;
-    const precio_noche = document.getElementById('precio-noche').value;
-    const calle = document.getElementById('calle').value;
-    const num_calle = document.getElementById('num-calle').value;
-    const telefono = document.getElementById('tel').value;
 
-    let datos_modificacion = {
-        id: parseInt(id_hotel),
-        nombre: nombre_hotel,
-        foto_hotel: foto_hotel.trim(),
-        id_ciudad: parseInt(id_ciudad),
-        cant_estrellas: parseInt(cant_estrellas),
-        cant_habitaciones: parseInt(cant_habitaciones),
-        precio_noche: parseInt(precio_noche),
-        calle: calle.trim(),
-        num_calle: parseInt(num_calle),
-        telefono: parseInt(telefono)
-    };
+    const formularioHotel = document.getElementById('formModificarHotel')
 
-    fetch('http://localhost:3000/api/v1/hoteles/' + parseInt(id_hotel), {
-        method: 'PUT',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(datos_modificacion)
-    }).then(response => {
-        if (response.ok) {
-            alert(`Hotel ${nombre_hotel} modificado con éxito`)
-            limpiar_campos()
-        }
-        else {
-            alert('Error al modificar el hotel')
-        }
-    });
+    formularioHotel.addEventListener('submit', (event) => {
+        event.preventDefault()
+        
+        const foto_hotel = document.getElementById('foto-hotel').value;
+        const cant_estrellas = document.getElementById('cant-estrellas').value;
+        const cant_habitaciones = document.getElementById('cant-habitaciones').value;
+        const precio_noche = document.getElementById('precio-noche').value;
+        const calle = document.getElementById('calle').value;
+        const num_calle = document.getElementById('num-calle').value;
+        const telefono = document.getElementById('tel').value;
+
+        let datos_modificacion = {
+            id: parseInt(id_hotel),
+            nombre: nombre_hotel,
+            foto_hotel: foto_hotel.trim(),
+            id_ciudad: parseInt(id_ciudad),
+            cant_estrellas: parseInt(cant_estrellas),
+            cant_habitaciones: parseInt(cant_habitaciones),
+            precio_noche: parseInt(precio_noche),
+            calle: calle.trim(),
+            num_calle: parseInt(num_calle),
+            telefono: parseInt(telefono)
+        };
+
+        fetch('http://localhost:3000/api/v1/hoteles/' + parseInt(id_hotel), {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(datos_modificacion)
+        }).then(response => {
+            if (response.ok) {
+                alert(`Hotel ${nombre_hotel} modificado con éxito`)
+                limpiar_campos()
+            }
+            else {
+                alert('Error al modificar el hotel')
+            }
+        });
+    })
 }
 
 // Sección "registrarse"
@@ -750,7 +773,7 @@ function registrarse(){
     const formularioUsuario = document.getElementById('formRegistro')
 
     // Al enviar el formulario
-    formularioUsuario.addEventListener('submit', () => {
+    formularioUsuario.addEventListener('submit', (event) => {
         event.preventDefault()
 
         // Obtención de los datos de nuevo usuario

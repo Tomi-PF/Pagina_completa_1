@@ -48,7 +48,7 @@
             
             <div class="contenedor-form">
                 <header>Editar reserva</header>
-                <form class="form" id="formReserva" action="form-reserva">
+                <form class="form" id="formEditarReserva" action="form-reserva">
                     
                     <div class="input-box">
                         <label>Nombre completo</label>
@@ -114,7 +114,7 @@
                         <input name="fecha-salida" id="fecha-salida" type="date" required>
                     </div>
                 </div>
-                <button onclick="editar_datos_reserva()">Enviar</button>
+                <button type="submit">Enviar</button>
             </form>
         </div>
 
@@ -128,6 +128,7 @@
     <script>
         document.addEventListener('load', abrir_sesion())
         document.addEventListener('load', cargar_datos_reserva())
+        document.addEventListener('load', editar_datos_reserva())
     </script>
 
     <script src="script.js"></script>

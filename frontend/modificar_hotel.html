@@ -44,7 +44,7 @@
             
             <div class="contenedor-form">
                 <header>Formulario para modificar ciudades</header>
-                <form class="form">
+                <form class="form" id="formModificarHotel">
                     
                     <div class="input-box">
                         <label>Foto del hotel</label>
@@ -75,7 +75,7 @@
                         <input id="tel" type="number" placeholder="Ingrese número de telefono" required>
                     </div>
                     <div class="column">
-                        <button onclick="enviar_datos_hotel()">Enviar</button>
+                        <button type="submit">Enviar</button>
                         <button onabort="limpiar_campos()">Limpiar</button>
                     </div>
                     
@@ -92,6 +92,7 @@
         document.addEventListener('load', abrir_sesion())
         document.addEventListener('load', obtener_nombre_hotel())
         document.addEventListener('load', cargar_datos_hotel())
+        document.addEventListener('load', enviar_datos_hotel())
     </script>
     
 </body>
