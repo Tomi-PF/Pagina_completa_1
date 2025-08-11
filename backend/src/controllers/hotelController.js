@@ -215,12 +215,12 @@ const deleteHotel = async (req, res) => {
 }
 
 module.exports = {
-    getAllHoteles,
-    getHotel,
-    getHotelbyCiudad,
-    getHotelesbyCiudad,
-    getHotelbyNombre,
-    createHotel,
-    updateHotel,
-    deleteHotel
-  }
+  getAllHoteles,
+  getHotel,
+  getHotelbyCiudad,
+  getHotelesbyCiudad,
+  getHotelbyNombre,
+  createHotel,
+  updateHotel,
+  deleteHotel
+}
