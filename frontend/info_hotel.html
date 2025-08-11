@@ -6,6 +6,8 @@
     <title>Información Hotel - Aterrizar</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.2/css/bulma.min.css">
     <link rel="stylesheet" href="styles.css">
+    <link rel="shortcut icon" href="img/Logo.png" type="image/x-icon">
+    <script src="index.js"></script>
 </head>
 <body>
 
@@ -37,6 +39,8 @@
 
     <div class="content">
         <h2 id="titulo-hotel"></h2>
+
+        <img id="foto-hotel">
         
         <p id="datos-hotel"></p>
 
@@ -54,60 +58,9 @@
     </footer>
 
     <script>
-
-        document.addEventListener('DOMContentLoaded', () => {
-
-            if(localStorage.getItem('id_usuario')){
-
-                const boton_inicio_sesion = document.getElementById('in_ses')
-                boton_inicio_sesion.style.display = "none"
-                const boton_registrarse = document.getElementById('reg')
-                boton_registrarse.style.display = "none"
-                const boton_cerrar_sesion = document.getElementById('c_ses')
-                boton_cerrar_sesion.style.display = "flex"
-                const boton_modificar = document.getElementById('boton-modificar')
-                boton_modificar.style.display = "flex"
-
-            }
-        })
-
-        const parametros_url = new URLSearchParams(window.location.search)
-        const id = parametros_url.get('id')
-
-        fetch(`http://localhost:3000/api/v1/hoteles/${id}`)
-        .then(response => response.json())
-        .then(hotel => {
-            const titulo = document.getElementById('titulo-hotel')
-            titulo.innerText = `Información del hotel: ${hotel.nombre}`
-
-            const datos = document.getElementById('datos-hotel')
-            datos.innerText = `Dirección: ${hotel.direccion}. Habitaciones: ${hotel.habitaciones}.`
-            
-            const boton_modificar = document.getElementById("boton-modificar")
-            boton_modificar.setAttribute("href", `modificar_hotel.html?id=${hotel.id}`)
-        });
-
-        function cerrar_sesion(){
-
-            const id_usuario = localStorage.getItem('id_usuario')
-            fetch('http://localhost:3000/api/v1/usuarios/desautenticar/' + id_usuario, {
-                method: 'PUT'
-            })
-
-            const boton_inicio_sesion = document.getElementById('in_ses')
-            boton_inicio_sesion.style.display = "flex"
-            const boton_registrarse = document.getElementById('reg')
-            boton_registrarse.style.display = "flex"
-            const boton_cerrar_sesion = document.getElementById('c_ses')
-            boton_cerrar_sesion.style.display = "none"
-            const boton_modificar = document.getElementById('boton-modificar')
-            boton_modificar.style.display = "none"
-
-            localStorage.removeItem('id_usuario')
-        }
-
+        document.addEventListener('load', abrir_sesion())
+        document.addEventListener('load', obtener_info_hotel())
     </script>
 
 </body>
 </html>
-

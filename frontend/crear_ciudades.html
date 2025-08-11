@@ -6,6 +6,8 @@
     <title>Aterrizar</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.2/css/bulma.min.css">
     <link rel="stylesheet" href="styles.css"> <!-- Enlace al archivo CSS -->
+    <link rel="shortcut icon" href="img/Logo.png" type="image/x-icon">
+    <script src="index.js"></script>
 </head>
 <body>
     <div class="navbar">
@@ -43,7 +45,7 @@
             
             <div class="contenedor-form">
                 <header>Formulario para crear ciudades</header>
-                <form class="form">
+                <form class="form" id="formCrearCiudad">
                     
                     <div class="input-box">
                         <label>Nombre ciudad</label>
@@ -67,8 +69,7 @@
                     </div>
                     
                     <div class="column">
-                        <button onclick="enviar_datos()">Enviar</button>
-                        <button onabort="limpiar_campos()">Limpiar</button>
+                        <button type="submit">Enviar</button>
                     </div>
                     
                 </form>
@@ -79,78 +80,10 @@
     <footer>
         <p>Contacto: <a href="mailto:Aterrizar@gmail.com">Aterrizar@gmail.com</a> | Teléfono: 0800-777-2354</p>
     </footer>
-    
+
     <script>
-
-        document.addEventListener('DOMContentLoaded', () => {
-
-            if(localStorage.getItem('id_usuario')){
-
-                const boton_inicio_sesion = document.getElementById('in_ses')
-                boton_inicio_sesion.style.display = "none"
-                const boton_registrarse = document.getElementById('reg')
-                boton_registrarse.style.display = "none"
-                const boton_cerrar_sesion = document.getElementById('c_ses')
-                boton_cerrar_sesion.style.display = "flex"
-
-            }
-        })
-
-        function limpiar_campos(){
-            document.getElementById('nombre_ciudad').value = '';
-            document.getElementById('foto_ciudad').value = '';
-            document.getElementById('provincia_ciudad').value = '';
-            document.getElementById('tamaño_ciudad').value = '';
-            document.getElementById('año_fundación').value = '';
-        }
-        function enviar_datos(){
-            event.preventDefault()
-            
-            const nombre_ciudad = document.getElementById('nombre_ciudad').value;
-            const foto_ciudad = document.getElementById('foto_ciudad').value;
-            const provincia_ciudad = document.getElementById('provincia_ciudad').value;
-            const tamaño_ciudad = document.getElementById('tamaño_ciudad').value;
-            const año_fundación = document.getElementById('año_fundación').value;
-            let datos_creacion = {
-                nombre: nombre_ciudad,
-                foto_ciudad: foto_ciudad,
-                provincia: provincia_ciudad,
-                tamaño: parseFloat(tamaño_ciudad),
-                año_fundacion: parseInt(año_fundación)
-            };
-            fetch('http://localhost:3000/api/v1/ciudades/', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(datos_creacion)
-            }).then(response => {
-                if (response.status === 201) {
-                    alert("Ciudad creada con éxito");
-                    limpiar_campos()
-                } else {
-                    alert("No se pudo crear la ciudad");
-                }
-            });
-        }
-
-        function cerrar_sesion(){
-
-            const id_usuario = localStorage.getItem('id_usuario')
-            fetch('http://localhost:3000/api/v1/usuarios/desautenticar/' + id_usuario, {
-                method: 'PUT'
-            })
-
-            const boton_inicio_sesion = document.getElementById('in_ses')
-            boton_inicio_sesion.style.display = "flex"
-            const boton_registrarse = document.getElementById('reg')
-            boton_registrarse.style.display = "flex"
-            const boton_cerrar_sesion = document.getElementById('c_ses')
-            boton_cerrar_sesion.style.display = "none"
-
-            localStorage.removeItem('id_usuario')
-        }
-
+        document.addEventListener('load', abrir_sesion())
+        document.addEventListener('load', enviar_datos())
     </script>
 </body>
 </html>

@@ -42,8 +42,6 @@ const getReserva = async (req, res) => {
     }
     res.json(reserva)
 
-    res.json(reserva)
-
   } catch (error) {
     res.status(500).json({
       error: "Error al buscar la reserva"
