@@ -232,7 +232,6 @@ function enviar_datos(){
                 num_calle: parseInt(num_calle),
                 telefono: parseInt(telefono)
             };
-            console.log(datos_creacion)
 
             fetch('http://localhost:3000/api/v1/hoteles/', {
                 method: 'POST',
@@ -603,7 +602,6 @@ function cargar_datos_ciudad(){
         const titulo = document.getElementById('titulo-ciudad')
         titulo.innerText = `Modificar datos de: ${ciudad.nombre}`
 
-        console.log(ciudad.foto_ciudad)
         document.getElementById('foto-ciudad').value = ciudad.foto_ciudad
         document.getElementById('provincia-ciudad').value = ciudad.provincia
         document.getElementById('tamaño-ciudad').value = ciudad.tamaño
@@ -665,7 +663,6 @@ function cargar_datos_hotel(){
     fetch('http://localhost:3000/api/v1/hoteles/' + id_hotel)
     .then(response => response.json())
     .then(hotel => {
-        console.log(hotel)
         document.getElementById('foto-hotel').value = hotel.foto_hotel
         document.getElementById('cant-estrellas').value = hotel.cant_estrellas
         document.getElementById('cant-habitaciones').value = hotel.cant_habitaciones
@@ -829,7 +826,6 @@ function crear_reserva(){
             return response.json()
         })
         .then( data => {
-            console.log('Reserva creada:', data)
             alert('Reserva creada con éxito')
             window.location.href = 'http://localhost:8000/gestionar_reservas'
             formReserva.reset()
@@ -897,7 +893,6 @@ function crear_card_hotel() {
     .then(response => response.json())
     .then(hoteles => {
             
-        console.log(hoteles)
         if (hoteles.length === 0) {
             mensaje.innerText = "No hay hoteles disponibles."
             return
