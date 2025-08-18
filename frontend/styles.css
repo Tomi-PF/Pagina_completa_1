@@ -337,7 +337,7 @@ button.prev:hover, button.next:hover {
 }
 
 
-.select-box select{
+.select-box select {
     height: 100%;
     width: 100%;
     border: none;
@@ -361,11 +361,11 @@ button.prev:hover, button.next:hover {
     margin-top: 20px;
 }
 
-.form button:hover{
+.form button:hover {
     background-color: #4c4c4c;
 }
 
-.input-box .cant_personas_container{
+.input-box .cant_personas_container {
     display: inline-flex;
     align-items: center;
 }
@@ -406,7 +406,7 @@ button.prev:hover, button.next:hover {
     background-color: #4c4c4c;
 }
 
-#form_seccion{
+#form_seccion {
     max-width: 400px;
 }
 
@@ -490,10 +490,10 @@ hr {
 
 /* Responsive */
 
-@media screen and (max-width: 500px){
-.form .column{
-    flex-wrap: wrap;
-}
+@media screen and (max-width: 500px) {
+    .form .column {
+        flex-wrap: wrap;
+    }
 }
 
 .section-form {
